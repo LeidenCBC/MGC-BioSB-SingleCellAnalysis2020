@@ -1,6 +1,6 @@
 # MGC Course Single Cell Analysis
 
-This week-long course will cover the practicalities of single-cell sample prep and analysis with a particular focus on single-cell RNA-seq libraries. This course is aimed at both wet-lab researchers interested in learning how to analyze their own single-cell data sets, as well as bioinformaticians who are new to single-cell sequencing analysis. Basic knowledge of the programming language R is a prerequisite for participation in the course.
+This week-long course will cover the practicalities of single-cell sample prep and analysis with a particular focus on single-cell RNA-seq libraries. This course is aimed at both wet-lab researchers interested in learning how to analyze their own single-cell data sets, as well as bioinformaticians who are new to single-cell sequencing analysis.
 
 ### Date
 14 – 18 October, 2019
@@ -9,10 +9,10 @@ This week-long course will cover the practicalities of single-cell sample prep a
 Erasmus MC
 [ADD_MORE_DETAILS]
 
-### [Schedule](schedule.md)
+### [Programme](Programme.md)
 
 ### Prerequisities
-In order to participate in this course you should have prior experience in using R.
+Basic knowledge of the programming language R is a prerequisite for participation in the course.
 
 ### Lecturers
 - Susan Kloet (LUMC)
