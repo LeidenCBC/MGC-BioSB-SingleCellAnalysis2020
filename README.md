@@ -1,4 +1,4 @@
-# MGC Course Single Cell Analysis
+# MGC Course - Single Cell Analysis
 
 This week-long course will cover the practicalities of single-cell sample prep and analysis with a particular focus on single-cell RNA-seq libraries. This course is aimed at both wet-lab researchers interested in learning how to analyze their own single-cell data sets, as well as bioinformaticians who are new to single-cell sequencing analysis.
 

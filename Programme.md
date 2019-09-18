@@ -25,8 +25,8 @@
 - **10:00-10:30** _coffee break_
 - **10:30-12:00**	Labs: [Dimensionality reduction](LINK_TO_PRACTICAL), ([Rmd file](LINK_TO_RMD)) (Thomas Höllt)
 - **12:00-13:00** _lunch_
-- **13:00-14:00**	Lecture: [Data integration](LINK_TO_PRACTICAL) (Ahmed Mahfouz)
-- **14:00-15:00**	Labs: [Data integration](LINK_TO_PRACTICAL), ([Rmd file](LINK_TO_RMD)) (Ahmed Mahfouz)
+- **13:00-14:00**	Lecture: [Data integration](session-integration/Data_Integration.pdf) (Ahmed Mahfouz)
+- **14:00-15:00**	Labs: [Data integration](session-integration/Data_Integration.md), ([Rmd file](session-integration/Data_Integration.Rmd)) (Ahmed Mahfouz)
 - **15:00-15:30** _coffee break_
 - **15:30-17:00**	Lecture: [Spatial transcriptomics](LINK_TO_SLIDES) (Susanne van den Brink)
 
