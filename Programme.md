@@ -1,4 +1,4 @@
-## Schedule
+## Programme
 
 ### Day 1 (Monday 14.10.2019)
 - **09:00-10:00** Lecture: Introduction and overview different single-cell platforms and assays (Susan Kloet)
