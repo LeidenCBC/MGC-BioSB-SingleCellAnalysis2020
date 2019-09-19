@@ -6,8 +6,8 @@ This week-long course will cover the practicalities of single-cell sample prep a
 14 – 18 October, 2019
 
 ### Location
-Erasmus MC
-[ADD_MORE_DETAILS]
+Erasmus MC - Rotterdam, room Ae-4.06 (Ae wing, 4th floor)
+For Building Ae, take entrance B - Sophia hospital and follow the signs Ae.
 
 ### [Programme](Programme.md)
 
