@@ -32,6 +32,5 @@ To be able to run all code chunks of the course you need to clone or download th
 - Anna Alemany (Hubrecht Institute)
 - Nathalie Groen (LUMC)
 
-### Additional information
-- Content: Ahmed Mahfouz <A.Mahfouz@lumc.nl>
-- Practicalities: Madeleine Nivard <M.J.M.Nivard@lumc.nl>
+### Contact
+Ahmed Mahfouz <A.Mahfouz@lumc.nl>
