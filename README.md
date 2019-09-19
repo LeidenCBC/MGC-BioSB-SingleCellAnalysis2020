@@ -25,7 +25,6 @@ Basic knowledge of the programming language R is a prerequisite for participatio
 - Susanne van den Brink (Hubrecht Institute)
 - Erik van den Akker (LUMC/TU Delft)
 - Monique van der wijst (UMCG)
-- Klaas Mulder (Radboud University Nijmegen)
 - Anna Alemany (Hubrecht Institute)
 - Nathalie Groen (LUMC)
 

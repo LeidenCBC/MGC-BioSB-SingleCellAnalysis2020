@@ -44,7 +44,7 @@ _mini-symposium_
 - **09:00-09:45** Nathalie Groen (LUMC) - _TITLE_
 - **09:45-10:30** Anna Alemany (Hubrecht Institute) - _TITLE_
 - **10:30-11:00** _coffee break_
-- **11:00-11:45** Klaas Mulder (Radboud University Nijmegen) - _TITLE_
+- **11:00-11:45** TBD - _TITLE_
 - **11:45-12:30** Monique van der wijst (UMCG) - _TITLE_
 
 ## [Back to main](README.md)
