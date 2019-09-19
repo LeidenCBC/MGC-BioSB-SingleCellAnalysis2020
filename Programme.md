@@ -37,7 +37,7 @@
 - **12:00-13:00** _lunch_
 - **13:00-14:30**	Lecture: CITE-seq/proteogenomic assays/multi-omic (Miao Chien)
 - **14:30-15:00** _coffee break_
-- **15:30-16:30**	Lecture: STCR/BCR sequencing (Erik van den Akker)
+- **15:30-16:30**	Lecture: STCR/BCR sequencing (Indu Khatri & Erik van den Akker)
 
 ### Day 5 (Friday 17.10.2019)
 _mini-symposium_

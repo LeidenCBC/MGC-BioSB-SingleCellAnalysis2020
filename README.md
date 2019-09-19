@@ -27,6 +27,7 @@ To be able to run all code chunks of the course you need to clone or download th
 - Natasja de Vries (LUMC)
 - Thomas Höllt (LUMC/TU Delft)
 - Susanne van den Brink (Hubrecht Institute)
+- Indu Khatri (LUMC)
 - Erik van den Akker (LUMC/TU Delft)
 - Monique van der wijst (UMCG)
 - Anna Alemany (Hubrecht Institute)
