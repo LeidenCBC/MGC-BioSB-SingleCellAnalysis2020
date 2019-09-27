@@ -12,14 +12,14 @@
 
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Introduction and overview different single-cell platforms and assays | Susan Kloet | Ae-4.06 |
+|09:00-10:00 |Lecture: Overview different single-cell platforms and assays | Susan Kloet | Ae-4.06 |
 |10:00-10:30 |_coffee break_ |  | Ae-4.06 |
 |10:30-12:00 |Lecture: 10x Genomics / Drop-Seq – how it works | Susan Kloet & Miao Chien | Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
-|13:00-14:00 |Lecture: Lecture: Plate-based RNA-seq (iCell8, Smart-Seq, CEL-seq, Strand-seq) | Miao Chien | Ae-3.21 |
-|14:00-15:00 |Lecture: Experimental design + Best practices / tips and tricks for sample preparation | Susan Kloet | Ae-3.21 |
+|13:00-14:00 |Lecture: Plate-based RNA-seq | Miao Chien | Ae-3.21 |
+|14:00-15:00 |Lecture: Experimental design & Best practices for sample preparation | Susan Kloet | Ae-3.21 |
 |15:00-15:30 |_coffee break_ | | Ae-3.21 |
-|15:30-17:00 |Lecture and Lab: Preprocessing (from reads to a count matrix), including 10x Genomics Cell Ranger | Roberta Menafra | Ae-3.21 |
+|15:30-17:00 |Lecture and Lab: Preprocessing (from reads to a count matrix) | Roberta Menafra | Ae-3.21 |
 
 ### Day 2 (Tuesday 15.10.2019)
 - **09:00-10:00**	Lecture: Quality control and normalization (Ahmed Mahfouz)
