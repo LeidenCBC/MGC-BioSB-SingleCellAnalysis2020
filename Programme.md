@@ -10,6 +10,9 @@
 - **15:00-15:30** _coffee break_
 - **15:30-17:00** Lecture and Lab: Preprocessing (from reads to a count matrix), including 10x Genomics Cell Ranger (Roberta Menafra)
 
+|09:00-10:00 |Lecture: Introduction and overview different single-cell platforms and assays | Susan Kloet | Ae-4.06 |
+
+
 ### Day 2 (Tuesday 15.10.2019)
 - **09:00-10:00**	Lecture: Quality control and normalization (Ahmed Mahfouz)
 - **10:00-10:30** _coffee break_
