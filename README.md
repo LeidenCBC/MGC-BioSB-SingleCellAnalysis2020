@@ -7,7 +7,7 @@ This week-long course will cover the practicalities of single-cell sample prep a
 
 ### Location
 Erasmus MC - Rotterdam, rooms Ae-4.06 (Ae wing, 4th floor) and Ae-3.21 (Ae wing, 3rd floor)\
-For Building Ae, take entrance B - Sophia hospital and follow the signs Ae.
+For Building Ae, take entrance B - Sophia hospital and follow the signs Ae.\
 Travel Directions: [https://www.molmed.nl/maps/maps.asp](https://www.molmed.nl/maps/maps.asp)
 
 ### [Programme](Programme.md)
