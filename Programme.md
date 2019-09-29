@@ -8,7 +8,7 @@
 |10:30-12:00 |Lecture: 10x Genomics / Drop-Seq – how it works | Susan Kloet & Miao Chien | Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:00 |Lecture: Plate-based RNA-seq | Miao Chien | Ae-3.21 |
-|14:00-15:00 |Lecture: Experimental design & Best practices for sample preparation | Susan Kloet | Ae-3.21 |
+|14:00-15:00 |Lecture: Experimental design & sample preparation | Susan Kloet | Ae-3.21 |
 |15:00-15:30 |_coffee break_ | | Ae-3.21 |
 |15:30-17:00 |Lecture and Lab: Preprocessing (from reads to a count matrix) | Roberta Menafra | Ae-3.21 |
 
@@ -47,8 +47,7 @@
 |14:30-15:00 |_coffee break_ | | Ae-4.06 |
 |15:00-16:30 |Lecture: STCR/BCR sequencing |Indu Khatri & Erik van den Akker | Ae-3.21 |
 
-### Day 5 (Friday 18.10.2019)
-_mini-symposium_
+### Day 5 (Friday 18.10.2019) - _Mini-symposium_
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
 |09:00-09:45 |_TBA_ | Nathalie Groen (LUMC) | Ae-4.06 |
