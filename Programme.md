@@ -18,7 +18,7 @@
 |09:00-10:00 |Lecture: Quality control and normalization | Ahmed Mahfouz | Ae-4.06 |
 |10:00-10:30 |_coffee break_ |  | Ae-4.06 |
 |10:30-12:00 |Lab: Quality control and normalization | Ahmed Mahfouz | Ae-4.06 |
-|12:00-13:00 |_lunch_ |  | _TBA_ |
+|12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:00 |Lecture: Clustering | Marcel Reinders | Ae-4.06 |
 |14:00-15:00 |Lab: Clustering | Marcel Reinders | Ae-4.06 |
 |15:00-15:30 |_coffee break_ | | Ae-4.06 |
@@ -45,7 +45,7 @@
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:30 |Lecture: CITE-seq/proteogenomic assays/multi-omic | Miao Chien | Ae-4.06 |
 |14:30-15:00 |_coffee break_ | | Ae-4.06 |
-|15:00-16:30 |Lecture: STCR/BCR sequencing |Indu Khatri & Erik van den Akker | Ae-3.21 |
+|15:00-16:30 |Lecture: STCR/BCR sequencing |Indu Khatri & Erik van den Akker | Ae-4.06 |
 
 ### Day 5 (Friday 18.10.2019) - _Mini-symposium_
 | When | What | Who | Where |
