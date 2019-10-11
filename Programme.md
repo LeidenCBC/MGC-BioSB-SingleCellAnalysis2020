@@ -20,7 +20,7 @@
 |10:30-12:00 |Lab: [Quality control and normalization](session-qc-normalization/QC_Normalization.md), ([Rmd file](session-qc-normalization/QC_Normalization.Rmd)) | Ahmed Mahfouz | Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:00 |Lecture: Clustering | Marcel Reinders | Ae-4.06 |
-|14:00-15:00 |Lab: Clustering | Marcel Reinders | Ae-4.06 |
+|14:00-15:00 |Lab: [Clustering](session-clustering/Clustering.md), ([Rmd file](session-clustering/Clustering.Rmd)) | Marcel Reinders | Ae-4.06 |
 |15:00-15:30 |_coffee break_ | | Ae-4.06 |
 |15:30-17:00 |Lecture & Lab: Mass Cytometry | Natasja de Vries | Ae-4.06 |
 
