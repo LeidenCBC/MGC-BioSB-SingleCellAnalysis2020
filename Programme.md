@@ -51,9 +51,9 @@
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
 |09:00-09:45 |_TBA_ | Nathalie Groen (LUMC) | Ae-4.06 |
-|09:45-10:30 |_TBA_ | Anna Alemany (Hubrecht Institute) | Ae-4.06 |
+|09:45-10:30 |CRISPR/Cas9-based lineage tracing in zebrafish: a glimpse on development and regeneration | Anna Alemany (Hubrecht Institute) | Ae-4.06 |
 |10:30-11:00 |_coffee break_ | | Ae-4.06 |
-|11:00-11:45 |_TBA_ | Susana Chuva de Sousa (LUMC) | Ae-4.06 |
+|11:00-11:45 |Single cell sequencing to decipher the human germline | Susana Chuva de Sousa (LUMC) | Ae-4.06 |
 |11:45-12:30 |_TBA_ | Monique van der wijst (UMCG) | Ae-4.06 |
 
 
