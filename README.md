@@ -16,8 +16,8 @@ Travel Directions: [https://www.molmed.nl/maps/maps.asp](https://www.molmed.nl/m
 Basic knowledge of the programming language R is a prerequisite for participation in the course.
 
 ### Software and Data
-All participants are required to bring their own laptops for this course. Make sure you have Rstudio and R (v3.5.0) installed before the course.<br/>   
-To be able to run all code chunks of the course you need to clone or download the course GitHub repository and start an R session in the repository folder. You will also need to install the packages listed in each practical session manually.
+All participants are required to bring their own laptops for this course. Make sure you have Rstudio and R (v3.5) installed before the course.<br/>   
+To be able to run all code chunks of the course you need to clone or download the course GitHub repository and start an R session in the repository folder. You will also need to install the packages listed [here](install_packages.md).
 
 ### Lecturers
 - Susan Kloet (LUMC)
