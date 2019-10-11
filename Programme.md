@@ -29,7 +29,7 @@
 | ------------- | ------------- | ------------- | ------------- |
 |09:00-10:00 |Lecture: Dimensionality reduction | Thomas Höllt | Ae-3.21 |
 |10:00-10:30 |_coffee break_ |  | Ae-3.21 |
-|10:30-12:00 |Lab: Dimensionality reduction | Thomas Höllt | Ae-3.21 |
+|10:30-12:00 |Lab: [Dimensionality reduction](session-dimensionalityreduction/Dimensionality_Reduction.md), ([Rmd file](session-dimensionalityreduction/Dimensionality_Reduction.rmd) | Thomas Höllt | Ae-3.21 |
 |12:00-13:00 |_lunch_ |  | Ae-3.21 |
 |13:00-14:00 |Lecture: [Data integration](session-integration/Data_Integration.pdf) | Ahmed Mahfouz | Ae-4.06 |
 |14:00-15:00 |Lab: [Data integration](session-integration/Data_Integration.md), ([Rmd file](session-integration/Data_Integration.Rmd)) | Ahmed Mahfouz | Ae-4.06 |
