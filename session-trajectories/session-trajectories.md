@@ -1,7 +1,7 @@
 Trajectory inference
 ====================
 
-Created by: Jules GILET
+Created by: Jules GILET (Institut Curie, France)
 
 Overview
 ========
