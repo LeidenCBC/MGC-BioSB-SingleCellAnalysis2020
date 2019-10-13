@@ -22,7 +22,7 @@
 |13:00-14:00 |Lecture: Clustering | Marcel Reinders | Ae-4.06 |
 |14:00-15:00 |Lab: [Clustering](session-clustering/Clustering.md), ([Rmd file](session-clustering/Clustering.Rmd)) | Marcel Reinders | Ae-4.06 |
 |15:00-15:30 |_coffee break_ | | Ae-4.06 |
-|15:30-17:00 |Lecture & Lab: Mass Cytometry | Natasja de Vries | Ae-4.06 |
+|15:30-17:00 |Lecture & Lab: [Mass Cytometry](session-MassCytometry/2019-10-15_Mass_Cytometry.pdf) | Natasja de Vries | Ae-4.06 |
 
 ### Day 3 (Wednesday 16.10.2019)
 | When | What | Who | Where |
@@ -50,11 +50,11 @@
 ### Day 5 (Friday 18.10.2019) - _Mini-symposium_
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
-|09:00-09:45 |_TBA_ | Nathalie Groen (LUMC) | Ae-4.06 |
+|09:00-09:45 |Exploring human pancreatic β-cell identity change using single-cell RNA sequencing | Nathalie Groen (LUMC) | Ae-4.06 |
 |09:45-10:30 |CRISPR/Cas9-based lineage tracing in zebrafish: a glimpse on development and regeneration | Anna Alemany (Hubrecht Institute) | Ae-4.06 |
 |10:30-11:00 |_coffee break_ | | Ae-4.06 |
 |11:00-11:45 |Single cell sequencing to decipher the human germline | Susana Chuva de Sousa (LUMC) | Ae-4.06 |
-|11:45-12:30 |_TBA_ | Monique van der wijst (UMCG) | Ae-4.06 |
+|11:45-12:30 |Using single-cell RNA-sequencing data to gain a personalized disease understanding | Monique van der wijst (UMCG) | Ae-4.06 |
 
 
 ## [Back to main](README.md)
