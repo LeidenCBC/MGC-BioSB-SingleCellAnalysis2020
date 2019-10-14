@@ -11,7 +11,8 @@ In this tutorial we will look at different ways to visualize single cell RNA-seq
 
 ## Datasets
 
-For this tutorial we will use the same three human pancreatic islet cell datasets as in the previous tutorial on data integration. The raw data matrix and associated metadata are available [here](https://www.dropbox.com/s/1zxbn92y5du9pu0/pancreas_v3_files.tar.gz?dl=1).
+For this tutorial we will use a human pancreatic islet cell dataset part of a combination of datasets available [here](https://www.dropbox.com/s/1zxbn92y5du9pu0/pancreas_v3_files.tar.gz?dl=1). For this tutorial the dateset is not of particular importance, as we will be looking at general dimensionality reduction methods, rather than specific biological findings.
+Therefore, we will also not look in detail on the loading and preprocessing part. The following [Data Integration](../session-integration/Data_Integration.md) lab will work with the same datsets and cover this in more detail.
 
 ### Data preprocessing
 
@@ -24,25 +25,25 @@ suppressMessages(require(ggplot2))
 
 ### Data loading and preprocessing
 
-Loading and preprocessing is based on the previous data integration lab.
+Loading and preprocessing is based on, and covered in more detail in the following [Data Integration](../session-integration/Data_Integration.md)  lab.
 
 Load in expression matrix and metadata. The metadata file contains the technology (`tech` column) and cell type annotations (`cell type` column) for each cell in the four datasets.
-The data is assumed to be in ```~/scrna-seq2019/day3/1-dimensionality-reduction/```. You can just change this to your preferred location, if you do not want to copy the data.
+The data is assumed to be in ```~/scrna-seq2019/session-dimensionalityreduction/```. You can just change this to your preferred location, if you do not want to copy the data.
 
 ```{r load}
-pancreas.data <- readRDS(file = "~/scrna-seq2019/day3/1-dimensionality-reduction/pancreas_expression_matrix.rds")
-metadata <- readRDS(file = "~/scrna-seq2019/day3/1-dimensionality-reduction/pancreas_metadata.rds")
+pancreas.data <- readRDS(file = "~/scrna-seq2019/session-dimensionalityreduction/pancreas_expression_matrix.rds")
+metadata <- readRDS(file = "~/scrna-seq2019/session-dimensionalityreduction/pancreas_metadata.rds")
 ```
 
-Create a Seurat object with all datasets as in the previous labs
+Create a Seurat object. This will create a data object with the original matrix and the metadata combined.
 
 ```{r create_Seurat}
 pancreas <- CreateSeuratObject(pancreas.data, meta.data = metadata)
 ```
 
-We separate the individual datasets into new Seurat objects.
+As there are four datasets, acquired with different technologies, we separate the individual datasets into new Seurat objects, according to the `tech` column of the metadata. We assign the fourth data object of the resulting split list to the `smartseq2` object and free the other memory.
 
-Note: from here on we only use the smartseq2 dataset to manage computation time. You can pick any of the above or the combined. `smartseq2` is the largest of the separated, so if you want to speed up the workflow you can switch to the others. Check the `pancreas.list` for the individual sizes. Make sure you do not remove the objects you want to use.
+Note: from here on we only use the `smartseq2` dataset to manage computation time. You can pick any of the above or the combined. `smartseq2` is the largest of the separated, so if you want to speed up the workflow you can switch to the others. Check the `pancreas.list` for the individual sizes. Make sure you do not remove the objects you want to use.
 
 ```{r separate_data}
 
@@ -62,7 +63,7 @@ remove(pancreas.data)
 gc()
 ```
 
-We use the same normalization and feature selection as in the previous lab.
+We perform standard preprocessing (log-normalization), identify variable features based on a variance stabilizing transformation `vst`, and scale the integrated data.
 
 ```{r normalize}
 # Normalize and find variable features
