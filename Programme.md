@@ -3,12 +3,12 @@
 ### Day 1 (Monday 14.10.2019)
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Overview different single-cell platforms and assays | Susan Kloet | Ae-4.06 |
+|09:00-10:00 |Lecture: [Overview different single-cell platforms and assays](Day1/Overview_single_cell_sequencing.pdf) | Susan Kloet | Ae-4.06 |
 |10:00-10:30 |_coffee break_ |  | Ae-4.06 |
-|10:30-12:00 |Lecture: 10x Genomics / Drop-Seq – how it works | Susan Kloet & Miao Chien | Ae-4.06 |
+|10:30-12:00 |Lecture: [10x Genomics](Day1/10xGenomics) | Susan Kloet & Miao Chien | Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:00 |Lecture: Plate-based RNA-seq | Miao Chien | Ae-3.21 |
-|14:00-15:00 |Lecture: Experimental design & sample preparation | Susan Kloet | Ae-3.21 |
+|14:00-15:00 |Lecture: [Experimental design & sample preparation](Day1/Sample_prep_and_experimental_design) | Susan Kloet | Ae-3.21 |
 |15:00-15:30 |_coffee break_ | | Ae-3.21 |
 |15:30-17:00 |Lecture and Lab: Preprocessing (from reads to a count matrix) | Roberta Menafra | Ae-3.21 |
 
@@ -34,7 +34,7 @@
 |13:00-14:00 |Lecture: [Data integration](session-integration/Data_Integration.pdf) | Ahmed Mahfouz | Ae-4.06 |
 |14:00-15:00 |Lab: [Data integration](session-integration/Data_Integration.md), ([Rmd file](session-integration/Data_Integration.Rmd)) | Ahmed Mahfouz | Ae-4.06 |
 |15:00-15:30 |_coffee break_ | | Ae-4.06 |
-|15:30-17:00 |Lecture: Spatial transcriptomics | Susanne van den Brink | Ae-4.06 |
+|15:30-17:00 |Lecture: [Spatial transcriptomics](session-spatial_transcriptomics/SpatialTranscriptomicsTechnologies_SvdB_OCt2019) | Susanne van den Brink | Ae-4.06 |
 
 ### Day 4 (Thursday 17.10.2019)
 | When | What | Who | Where |
