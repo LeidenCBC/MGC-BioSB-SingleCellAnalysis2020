@@ -15,7 +15,7 @@
 ### Day 2 (Tuesday 15.10.2019)
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Quality control and normalization | Ahmed Mahfouz | Ae-4.06 |
+|09:00-10:00 |Lecture: [Quality control and normalization](session-qc-normalization/QC&normalization_AM.pdf) | Ahmed Mahfouz | Ae-4.06 |
 |10:00-10:30 |_coffee break_ |  | Ae-4.06 |
 |10:30-12:00 |Lab: [Quality control and normalization](session-qc-normalization/QC_Normalization.md), ([Rmd file](session-qc-normalization/QC_Normalization.Rmd)) | Ahmed Mahfouz | Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
