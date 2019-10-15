@@ -5,9 +5,9 @@
 | ------------- | ------------- | ------------- | ------------- |
 |09:00-10:00 |Lecture: [Overview different single-cell platforms and assays](Day1/Overview_single_cell_sequencing.pdf) | Susan Kloet | Ae-4.06 |
 |10:00-10:30 |_coffee break_ |  | Ae-4.06 |
-|10:30-12:00 |Lecture: [Droplet-based scRNA-seq](Day1/Droplet-based scRNAseq_MPChien_Github.pdf), [10x Genomics](Day1/10xGenomics.pdf) | Susan Kloet & Miao Chien | Ae-4.06 |
+|10:30-12:00 |Lecture: [Droplet-based_scRNA-seq](Day1/Droplet-based scRNAseq_MPChien_Github.pdf), [10x Genomics](Day1/10xGenomics.pdf) | Susan Kloet & Miao Chien | Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
-|13:00-14:00 |Lecture: [Plate-based scRNA-seq](Day1/Plate-based scRNAseq_MPChien_Github.pdf) | Miao Chien | Ae-3.21 |
+|13:00-14:00 |Lecture: [Plate-based_scRNA-seq](Day1/Plate-based scRNAseq_MPChien_Github.pdf) | Miao Chien | Ae-3.21 |
 |14:00-15:00 |Lecture: [Experimental design & sample preparation](Day1/Sample_prep_and_experimental_design.pdf) | Susan Kloet | Ae-3.21 |
 |15:00-15:30 |_coffee break_ | | Ae-3.21 |
 |15:30-17:00 |Lecture and Lab: Preprocessing (from reads to a count matrix) | Roberta Menafra | Ae-3.21 |
