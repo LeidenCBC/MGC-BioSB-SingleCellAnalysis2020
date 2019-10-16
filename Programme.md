@@ -27,7 +27,7 @@
 ### Day 3 (Wednesday 16.10.2019)
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: [Dimensionality reduction] (session-dimensionalityreduction/Dimensionality_Reduction.pdf)| Thomas Höllt | Ae-3.21 |
+|09:00-10:00 |Lecture: [Dimensionality reduction](session-dimensionalityreduction/Dimensionality_Reduction.pdf)| Thomas Höllt | Ae-3.21 |
 |10:00-10:30 |_coffee break_ |  | Ae-3.21 |
 |10:30-12:00 |Lab: [Dimensionality reduction](session-dimensionalityreduction/Dimensionality_Reduction.md), ([Rmd file](session-dimensionalityreduction/Dimensionality_Reduction.rmd)) | Thomas Höllt | Ae-3.21 |
 |12:00-13:00 |_lunch_ |  | Ae-3.21 |
