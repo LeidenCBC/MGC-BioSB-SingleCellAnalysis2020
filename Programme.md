@@ -39,9 +39,9 @@
 ### Day 4 (Thursday 17.10.2019)
 | When | What | Who | Where |
 | ------------- | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Trajectory inference | Marcel Reinders | Ae-3.21 |
+|09:00-10:00 |Lecture: [Trajectory inference](session-trajectories/Trajectory_inference.pdf) | Mohammed Charrout | Ae-3.21 |
 |10:00-10:30 |_coffee break_ |  | Ae-3.21 |
-|10:30-12:00 |Lab: [Trajectory inference](session-trajectories/session-trajectories.md) | Marcel Reinders |Ae-4.06 |
+|10:30-12:00 |Lab: [Trajectory inference](session-trajectories/session-trajectories.md) | Mohammed Charrout |Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:30 |Lecture: CITE-seq/proteogenomic assays/multi-omic | Miao Chien | Ae-4.06 |
 |14:30-15:00 |_coffee break_ | | Ae-4.06 |
