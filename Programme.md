@@ -45,7 +45,7 @@
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
 |13:00-14:30 |Lecture: CITE-seq/proteogenomic assays/multi-omic | Miao Chien | Ae-4.06 |
 |14:30-15:00 |_coffee break_ | | Ae-4.06 |
-|15:00-16:30 |Lecture: [STCR/BCR sequencing](Day4/20191017_MGC-scBCR_EbvdA_IK.pdf) |Indu Khatri & Erik van den Akker | Ae-4.06 |
+|15:00-16:30 |Lecture: [TCR/BCR sequencing](Day4/20191017_MGC-scBCR_EbvdA_IK.pdf) |Indu Khatri & Erik van den Akker | Ae-4.06 |
 
 ### Day 5 (Friday 18.10.2019) - _Mini-symposium_
 | When | What | Who | Where |
