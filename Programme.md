@@ -43,7 +43,7 @@
 |10:00-10:30 |_coffee break_ |  | Ae-3.21 |
 |10:30-12:00 |Lab: [Trajectory inference](session-trajectories/session-trajectories.md) | Mohammed Charrout |Ae-4.06 |
 |12:00-13:00 |_lunch_ |  | Ae-4.06 |
-|13:00-14:30 |Lecture: CITE-seq/proteogenomic assays/multi-omic | Miao Chien | Ae-4.06 |
+|13:00-14:30 |Lecture: [Single cell multi-omics](Day4/Multi-omics_MPChien_GitHub.pdf) | Miao Chien | Ae-4.06 |
 |14:30-15:00 |_coffee break_ | | Ae-4.06 |
 |15:00-16:30 |Lecture: [TCR/BCR sequencing](Day4/20191017_MGC-scBCR_EbvdA_IK.pdf) |Indu Khatri & Erik van den Akker | Ae-4.06 |
 
