@@ -10,7 +10,7 @@
 |13:00-14:00 |Lecture: [Plate-based scRNA-seq](Day1/Plate-based_scRNAseq_MPChien_Github.pdf) | Miao Chien | Ae-3.21 |
 |14:00-15:00 |Lecture: [Experimental design & sample preparation](Day1/Sample_prep_and_experimental_design.pdf) | Susan Kloet | Ae-3.21 |
 |15:00-15:30 |_coffee break_ | | Ae-3.21 |
-|15:30-17:00 |Lecture and Lab: Preprocessing (from reads to a count matrix) | Roberta Menafra | Ae-3.21 |
+|15:30-17:00 |Lecture and Lab: [Preprocessing: from reads to a count matrix](Day1/SingleCell_pre-processing.pdf) | Roberta Menafra | Ae-3.21 |
 
 ### Day 2 (Tuesday 15.10.2019)
 | When | What | Who | Where |
