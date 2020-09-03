@@ -1,7 +1,7 @@
 ## Programme
 
 ### Day 1 (Monday 19.10.2020)
-| When | What | Who | Where |
+| When | What | Who |
 | ------------- | ------------- | ------------- |
 |09:00-10:00 |Lecture: Overview different single-cell platforms and assays | Susan Kloet |
 |10:00-10:30 |_break_ |  |
