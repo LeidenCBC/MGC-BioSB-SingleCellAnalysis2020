@@ -8,9 +8,10 @@
 |10:30-12:00 |Lecture: Plate-based scRNA-seq | Miao Chien |
 |12:00-13:00 |_lunch_ |  |
 |13:00-14:15 |Lecture: Droplet-based scRNA-seq | Susan Kloet & Miao Chien |
-|14:15-14:30 |Lecture: Experimental design & sample preparation | Susan Kloet |
-|15:00-15:30 |_break_ | |
-|15:30-17:00 |Lecture and Lab: Preprocessing: from reads to a count matrix | Roberta Menafra |
+|14:15-14:30 |_break_| |
+|14:30-15:30 |Lecture: Single-cell multi-omics | Miao Chien |
+|15:30-16:00 |_break_ | |
+|16:00-17:00 |Lecture and Lab: Preprocessing: from reads to a count matrix | Roberta Menafra |
 
 ### Day 2 (Tuesday 20.10.2020)
 | When | What | Who |
