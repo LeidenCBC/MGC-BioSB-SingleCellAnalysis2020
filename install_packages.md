@@ -32,4 +32,4 @@ BiocNeighbors (version 1.0.0)
 
 When using the install.packages() function to download a package, it could be that by default an older version was downloaded instead of the newer version that is needed. For example, just using install.packages(‘Seurat’) could install version 2 instead of version 3. If this happens, you can define the correct repository while installing the package (e.g.(install.pacakges(‘Seurat’, repo = “https://cran.r-project.org”)).
 
-When installing or loading a package (e.g. library(Seurat)), this could fail because of errors in other packages. Using remove.packages(‘package’) this package that gives the error can be removed and installing  it again using install.packages() might work. 
+When installing or loading a package (e.g. library(Seurat)), this could fail because of errors in other packages. Using remove.packages(‘package’) this package that gives the error can be removed and installing  it again using install.packages() might work.
