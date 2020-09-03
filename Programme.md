@@ -34,7 +34,7 @@
 |12:00-13:00 |_lunch_ |  |
 |13:00-14:00 |Lecture: Data integration | Tamim Abdelaal |
 |14:00-14:30 |_break_ | |
-|14:30-16:30 |Lab: Data integration | Tamim Abdelaal |
+|14:30-16:30 |Lab: Data integration | TAs |
 
 ### Day 4 (Thursday 22.10.2020)
 | When | What | Who |
