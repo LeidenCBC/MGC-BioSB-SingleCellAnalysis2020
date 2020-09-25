@@ -3,48 +3,53 @@ Quality Control and Normalization
 
 Created by: Ahmed Mahfouz
 
-# Overview
+Overview
+========
 
 In this practical, we will walk through a pipeline to analyze single
 cell RNA-sequencing (scRNA-seq) data. Starting from a count matrix, we
 will cover the following steps of the analysis: 1. Quality control 2.
 Normalization 3. Feature selection
 
-## Datasets
+Datasets
+--------
 
 For this tutorial we will use 3 different PBMC datasets from the 10x
 Genomics website
-(<https://support.10xgenomics.com/single-cell-gene-expression/datasets>).
+(<a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets" class="uri">https://support.10xgenomics.com/single-cell-gene-expression/datasets</a>).
 
-* 1k PBMCs using 10x v2 chemistry 
-* 1k PBMCs using 10x v3 chemistry 
-* 1k PBMCs using 10x v3 chemistry in combination with cell surface proteins, but disregarding the protein data and only looking at gene expression.
+-   1k PBMCs using 10x v2 chemistry
+-   1k PBMCs using 10x v3 chemistry
+-   1k PBMCs using 10x v3 chemistry in combination with cell surface
+    proteins, but disregarding the protein data and only looking at gene
+    expression.
 
-The datasets are available in this repository. 
+The datasets are available in this repository.
 
 Load required packages:
 
-``` r
+```r
 suppressMessages(require(Seurat))
 suppressMessages(require(scater))
 suppressMessages(require(scran))
 suppressMessages(require(Matrix))
 ```
 
-## Read the data and create a Seurat object
+Read the data and create a Seurat object
+----------------------------------------
 
 Here, we use the function Read10X\_h5 to read in the expression matrices
 in R.
 
-``` r
+```r
 v3.1k <- Read10X_h5("pbmc_1k_v3_filtered_feature_bc_matrix.h5", use.names = T)
 v2.1k <- Read10X_h5("pbmc_1k_v2_filtered_feature_bc_matrix.h5", use.names = T)
 p3.1k <- Read10X_h5("pbmc_1k_protein_v3_filtered_feature_bc_matrix.h5", use.names = T)
 ```
 
-    ## Genome matrix has multiple modalities, returning a list of matrices for this genome
+	## Genome matrix has multiple modalities, returning a list of matrices for this genome
 
-``` r
+```r
 # select only gene expression data from the CITE-seq data.
 p3.1k <- p3.1k$`Gene Expression`
 ```
@@ -52,7 +57,7 @@ p3.1k <- p3.1k$`Gene Expression`
 First, create Seurat objects for each of the datasets, and then merge
 into one large seurat object.
 
-``` r
+```r
 sdata.v2.1k <- CreateSeuratObject(v2.1k, project = "v2.1k")
 sdata.v3.1k <- CreateSeuratObject(v3.1k, project = "v3.1k")
 sdata.p3.1k <- CreateSeuratObject(p3.1k, project = "p3.1k")
@@ -69,12 +74,12 @@ alldata
 
     ## An object of class Seurat 
     ## 33538 features across 2931 samples within 1 assay 
-    ## Active assay: RNA (33538 features)
+    ## Active assay: RNA (33538 features, 0 variable features)
 
 Check number of cells from each sample, is stored in the orig.ident slot
 of metadata and is autmatically set as active ident.
 
-``` r
+```r
 table(Idents(alldata))
 ```
 
@@ -82,13 +87,15 @@ table(Idents(alldata))
     ## p3.1k v2.1k v3.1k 
     ##   713   996  1222
 
+
 ## 1\. Quality control
+------------------
 
 Seurat automatically calculates some QC-stats, like number of UMIs and
 features per cell. Stored in columns nCount\_RNA & nFeature\_RNA of the
 metadata.
 
-``` r
+```r
 head(alldata@meta.data)
 ```
 
@@ -105,11 +112,8 @@ head(alldata@meta.data)
 We will manually calculate the proportion of mitochondrial reads and add
 to the metadata table.
 
-``` r
-mt.genes <- rownames(alldata)[grep("^MT-",rownames(alldata))]
-C <- GetAssayData(object = alldata, slot = "counts")
-
-percent.mito <- colSums(C[mt.genes,])/Matrix::colSums(C)*100
+```r
+percent.mito <- PercentageFeatureSet(alldata, pattern = "^MT-")
 alldata <- AddMetaData(alldata, percent.mito, col.name = "percent.mito")
 ```
 
@@ -118,15 +122,14 @@ alldata <- AddMetaData(alldata, percent.mito, col.name = "percent.mito")
 In the same manner we will calculate the proportion gene expression that
 comes from ribosomal proteins.
 
-``` r
-rb.genes <- rownames(alldata)[grep("^RP[SL]",rownames(alldata))]
-percent.ribo <- colSums(C[rb.genes,])/Matrix::colSums(C)*100
+```r
+percent.ribo <- PercentageFeatureSet(alldata, pattern = "^RP[SL]")
 alldata <- AddMetaData(alldata, percent.ribo, col.name = "percent.ribo")
 ```
 
 Now have another look at the metadata table
 
-``` r
+```r
 head(alldata@meta.data)
 ```
 
@@ -149,27 +152,19 @@ head(alldata@meta.data)
 
 Now we can plot some of the QC-features as violin plots
 
-``` r
-VlnPlot(alldata, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(alldata, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/plot_nGenes-1.png)<!-- -->
 
-``` r
-VlnPlot(alldata, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(alldata, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/plot_nUMIs-1.png)<!-- -->
 
-``` r
-VlnPlot(alldata, features = "percent.mito", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(alldata, features = "percent.mito", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/plot_mito-1.png)<!-- -->
 
-``` r
-VlnPlot(alldata, features = "percent.ribo", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(alldata, features = "percent.ribo", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/plot_ribo-1.png)<!-- -->
 
@@ -180,30 +175,22 @@ landscape when fewer of the lowly expressed genes are detected.
 
 We can also plot the different QC-measures as scatter plots.
 
-``` r
-FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
-```
+    FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
 
 ![](QC_Normalization_files/figure-gfm/plot_scatter1-1.png)<!-- -->
 
-``` r
-FeatureScatter(alldata, feature1 = "nFeature_RNA", feature2 = "percent.mito")
-```
+    FeatureScatter(alldata, feature1 = "nFeature_RNA", feature2 = "percent.mito")
 
 ![](QC_Normalization_files/figure-gfm/plot_scatter2-1.png)<!-- -->
 
-``` r
-FeatureScatter(alldata, feature1="percent.ribo", feature2="nFeature_RNA")
-```
+    FeatureScatter(alldata, feature1="percent.ribo", feature2="nFeature_RNA")
 
 ![](QC_Normalization_files/figure-gfm/plot_scatter3-1.png)<!-- -->
 
 We can also subset the data to only plot one sample.
 
-``` r
-FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", 
-               cells = WhichCells(alldata, expression = orig.ident == "v3.1k") )
-```
+    FeatureScatter(alldata, feature1 = "nCount_RNA", feature2 = "nFeature_RNA", 
+                   cells = WhichCells(alldata, expression = orig.ident == "v3.1k") )
 
 ![](QC_Normalization_files/figure-gfm/plot_scatter4-1.png)<!-- -->
 
@@ -226,15 +213,16 @@ Looking at the plots, make resonable decisions on where to draw the
 cutoff. In this case, the bulk of the cells are below 25% mitochondrial
 reads and that will be used as a cutoff.
 
-``` r
+```r
 #select cells with percent.mito < 25
-selected <- WhichCells(alldata, expression = percent.mito < 25)
+idx <- which(alldata$percent.mito < 25)
+selected <- WhichCells(alldata, cells = idx)
 length(selected)
 ```
 
     ## [1] 2703
 
-``` r
+```r
 # and subset the object to only keep those cells
 data.filt <- subset(alldata, cells = selected)
 
@@ -267,7 +255,7 @@ libraries.
 Filter the cells with high gene detection (putative doublets) with
 cutoffs 4100 for v3 chemistry and 2000 for v2.
 
-``` r
+```r
 #start with cells with many genes detected.
 high.det.v3 <- WhichCells(data.filt, expression = nFeature_RNA > 4100)
 high.det.v2 <- WhichCells(data.filt, expression = nFeature_RNA > 2000 & orig.ident == "v2.1k")
@@ -282,9 +270,9 @@ ncol(data.filt)
     ## [1] 2631
 
 Filter the cells with low gene detection (low quality libraries) with
-less than 1000 genes for v2 and \< 500 for v2.
+less than 1000 genes for v2 and &lt; 500 for v2.
 
-``` r
+```r
 #start with cells with many genes detected.
 low.det.v3 <- WhichCells(data.filt, expression = nFeature_RNA < 1000 & orig.ident != "v2.1k")
 low.det.v2 <- WhichCells(data.filt, expression = nFeature_RNA < 500 & orig.ident == "v2.1k")
@@ -302,31 +290,23 @@ ncol(data.filt)
 
 Lets plot the same qc-stats another time.
 
-``` r
-VlnPlot(data.filt, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(data.filt, features = "nFeature_RNA", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/vln.plot2-1.png)<!-- -->
 
-``` r
-VlnPlot(data.filt, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(data.filt, features = "nCount_RNA", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/vln.plot2-2.png)<!-- -->
 
-``` r
-VlnPlot(data.filt, features = "percent.mito", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(data.filt, features = "percent.mito", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/vln.plot2-3.png)<!-- -->
 
-``` r
-VlnPlot(data.filt, features = "percent.ribo", pt.size = 0.1) + NoLegend()
-```
+    VlnPlot(data.filt, features = "percent.ribo", pt.size = 0.1) + NoLegend()
 
 ![](QC_Normalization_files/figure-gfm/vln.plot2-4.png)<!-- -->
 
-``` r
+```r
 # and check the number of cells per sample before and after filtering
 table(Idents(alldata))
 ```
@@ -335,7 +315,7 @@ table(Idents(alldata))
     ## p3.1k v2.1k v3.1k 
     ##   713   996  1222
 
-``` r
+```r
 table(Idents(data.filt))
 ```
 
@@ -348,13 +328,21 @@ table(Idents(data.filt))
 Seurat has a function for calculating cell cycle scores based on a list
 of know S-phase and G2/M-phase genes.
 
-``` r
+```r
 data.filt <- CellCycleScoring(
   object = data.filt,
   g2m.features = cc.genes$g2m.genes,
   s.features = cc.genes$s.genes
 )
+```
 
+    ## Warning: The following features are not present in the object: MLF1IP, not
+    ## searching for symbol synonyms
+
+    ## Warning: The following features are not present in the object: FAM64A, HN1, not
+    ## searching for symbol synonyms
+
+```r
 VlnPlot(data.filt, features = c("S.Score","G2M.Score"))
 ```
 
@@ -364,11 +352,10 @@ In this case it looks like we only have a few cycling cells in the
 datasets.
 
 ## 2\. Normalization
+----------------
 
-``` r
-options(stringsAsFactors = FALSE)
-set.seed(32546)
-```
+    options(stringsAsFactors = FALSE)
+    set.seed(32546)
 
 To speed things up, we will continue working with the v3.1k dataset
 only. We will convert the Seurat object to a SCE object to work with the
@@ -377,14 +364,33 @@ scater package. You can read more about SCE objects
 
 Note: to create an SCE object directly from the count matrices, have a
 look at their tutorial at:
-<https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette-intro.html>.
+<a href="https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html" class="uri">https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html</a>.
 
-``` r
+```r
 pbmc.sce <- SingleCellExperiment(assays = list(counts = as.matrix(v3.1k)))
 pbmc.sce <- pbmc.sce[rowSums(counts(pbmc.sce) > 0) > 2,]
 isSpike(pbmc.sce, "MT") <- grepl("^MT-", rownames(pbmc.sce))
+```
+
+    ## Warning: 'isSpike<-' is deprecated.
+    ## Use 'isSpike<-' instead.
+    ## See help("Deprecated")
+
+    ## Warning: 'spikeNames' is deprecated.
+    ## See help("Deprecated")
+
+    ## Warning: 'isSpike' is deprecated.
+    ## See help("Deprecated")
+
+```r
 pbmc.sce <- calculateQCMetrics(pbmc.sce)
-colnames(colData(pbmc.sce))
+```
+
+    ## Warning: 'calculateQCMetrics' is deprecated.
+    ## Use 'perCellQCMetrics' or 'perFeatureQCMetrics' instead.
+
+```r
+print(colnames(colData(pbmc.sce)))
 ```
 
     ##  [1] "is_cell_control"                               
@@ -429,17 +435,15 @@ steps are very similar to what we have already done on the combined
 Seurat object but now we perform them on one dataset only using the
 Scater package.
 
-``` r
-pbmc.sce <- filter(pbmc.sce, pct_counts_MT < 20)
-pbmc.sce <- filter(pbmc.sce, 
-                   total_features_by_counts > 1000 & 
-                     total_features_by_counts < 4100)
+```r
+pbmc.sce <- pbmc.sce[, pbmc.sce$pct_counts_MT < 20]
+pbmc.sce <- pbmc.sce[, (pbmc.sce$total_features_by_counts > 1000 & pbmc.sce$total_features_by_counts < 4100)]
 ```
 
 Create a new assay with unnormalized counts for comparison to
 post-normalization.
 
-``` r
+```r
 assay(pbmc.sce, "logcounts_raw") <- log2(counts(pbmc.sce) + 1)
 plotRLE(pbmc.sce[,1:50], exprs_values = "logcounts_raw", style = "full")
 ```
@@ -449,25 +453,19 @@ plotRLE(pbmc.sce[,1:50], exprs_values = "logcounts_raw", style = "full")
 Run PCA and save the result in a new object, as we will overwrite the
 PCA slot later.
 
-``` r
+```r
 raw.sce <- runPCA(pbmc.sce, exprs_values = "logcounts_raw")
 scater::plotPCA(raw.sce, colour_by = "total_counts")
 ```
-
-    ## Warning: 'add_ticks' is deprecated.
-    ## Use '+ geom_rug(...)' instead.
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 Plot the expression of the B cell marker MS4A1.
 
-``` r
-plotReducedDim(raw.sce, use_dimred = "PCA", by_exprs_values = "logcounts_raw",
-               colour_by = "MS4A1")
+```r
+plotReducedDim(raw.sce, dimred = "PCA", by_exprs_values = "logcounts_raw",
+			   colour_by = "MS4A1")
 ```
-
-    ## Warning: 'add_ticks' is deprecated.
-    ## Use '+ geom_rug(...)' instead.
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 
@@ -481,40 +479,37 @@ Here we use the filtered data from the counts slot of the SCE object to
 create a Seurat object. After normalization, we convert the result back
 into a SingleCellExperiment object for comparing plots.
 
-``` r
+```r
 pbmc.seu <- CreateSeuratObject(counts(pbmc.sce), project = "PBMC")
 pbmc.seu <- NormalizeData(pbmc.seu)
 pbmc.seu.sce <- as.SingleCellExperiment(pbmc.seu)
 pbmc.seu.sce <- calculateQCMetrics(pbmc.seu.sce)
 ```
 
+    ## Warning: 'calculateQCMetrics' is deprecated.
+    ## Use 'perCellQCMetrics' or 'perFeatureQCMetrics' instead.
+
 Perform PCA and examine the normalization results with plotRLE and
 plotReducedDim. This time, use “logcounts” as the expression values to
 plot (or omit the parameter, as “logcounts” is the default value). Check
 some marker genes, for example GNLY (NK cells) or LYZ (monocytes).
 
-``` r
+```r
 plotRLE(pbmc.seu.sce[,1:50], style = "full")
 ```
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-``` r
+```r
 pbmc.seu.sce <- runPCA(pbmc.seu.sce)
 scater::plotPCA(pbmc.seu.sce, colour_by = "total_counts")
 ```
 
-    ## Warning: 'add_ticks' is deprecated.
-    ## Use '+ geom_rug(...)' instead.
-
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-``` r
-plotReducedDim(pbmc.seu.sce, use_dimred = "PCA", colour_by = "MS4A1")
+```r
+plotReducedDim(pbmc.seu.sce, dimred = "PCA", colour_by = "MS4A1")
 ```
-
-    ## Warning: 'add_ticks' is deprecated.
-    ## Use '+ geom_rug(...)' instead.
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
@@ -528,52 +523,64 @@ cells prior to normalization is not always necessary but it improves
 normalization accuracy by reducing the number of DE genes between cells
 in the same cluster.
 
-``` r
+```r
 qclust <- scran::quickCluster(pbmc.sce)
+```
+
+    ## Warning: handling of spike-ins via 'isSpike()' is deprecated.
+    ## Store spike-ins in 'altExps' instead.
+
+```r
 pbmc.sce <- scran::computeSumFactors(pbmc.sce, clusters = qclust)
+```
+
+    ## Warning: handling of spike-ins via 'isSpike()' is deprecated.
+    ## Store spike-ins in 'altExps' instead.
+
+```r
 summary(sizeFactors(pbmc.sce))
 ```
 
     ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##  0.1836  0.6380  0.8207  1.0000  1.2021  2.7399
+    ##  0.3095  0.6559  0.8292  1.0000  1.1831  2.7118
 
-``` r
+```r
 pbmc.sce <- normalize(pbmc.sce)
 ```
 
-    ## Warning in .get_all_sf_sets(object): spike-in set 'MT' should have its own
-    ## size factors
+    ## Warning: 'normalizeSCE' is deprecated.
+    ## Use 'logNormCounts' instead.
+    ## See help("Deprecated")
+
+    ## Warning: 'centreSizeFactors' is deprecated.
+    ## See help("Deprecated")
+
+    ## Warning in .get_all_sf_sets(object): spike-in set 'MT' should have its own size
+    ## factors
 
 Examine the results and compare to the log-normalized result. Are they
 different?
 
-``` r
+```r
 plotRLE(pbmc.sce[,1:50], exprs_values = "logcounts", exprs_logged = FALSE, 
-        style = "full")
+		style = "full")
 ```
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
-``` r
+```r
 pbmc.sce <- runPCA(pbmc.sce)
 scater::plotPCA(pbmc.sce, colour_by = "total_counts")
 ```
 
-    ## Warning: 'add_ticks' is deprecated.
-    ## Use '+ geom_rug(...)' instead.
-
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
-``` r
-plotReducedDim(pbmc.sce, use_dimred = "PCA", colour_by = "MS4A1")
+```r
+plotReducedDim(pbmc.sce, dimred = "PCA", colour_by = "MS4A1")
 ```
 
-    ## Warning: 'add_ticks' is deprecated.
-    ## Use '+ geom_rug(...)' instead.
-
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
-
-## 3\. Feature selection
+\#\# 3. Feature selection
 
 ### Feature selection: scran
 
@@ -589,9 +596,8 @@ during RNA capture and library preparation. see the [scran
 vignette](https://bioconductor.org/packages/devel/bioc/vignettes/scran/inst/doc/scran.html#5_variance_modelling)
 for details.
 
-``` r
-fit <- scran::trendVar(pbmc.sce, use.spikes = NA)
-dec <- scran::decomposeVar(pbmc.sce, fit)
+```r
+dec <- modelGeneVar(pbmc.sce)
 dec <- dec[!is.na(dec$FDR),]
 
 top.hvgs <- order(dec$bio, decreasing = TRUE)
@@ -599,30 +605,30 @@ head(dec[top.hvgs,])
 ```
 
     ## DataFrame with 6 rows and 6 columns
-    ##                     mean            total              bio
-    ##                <numeric>        <numeric>        <numeric>
-    ## S100A9   2.1798394106162 9.81200838511402 8.70848113171716
-    ## S100A8  1.94717610389369 8.74191022471459 7.73278930922898
-    ## LYZ     2.12848173541277 8.71130204756805 7.62859300817666
-    ## HLA-DRA 2.26709495525931 5.56946701594201 4.43065009839707
-    ## IGKC    1.03117091153778 4.64610433899492 3.94960628330731
-    ## CD74    2.85525470083599 4.66046377538451 3.29006358386425
-    ##                     tech               p.value                   FDR
-    ##                <numeric>             <numeric>             <numeric>
-    ## S100A9  1.10352725339686                     0                     0
-    ## S100A8  1.00912091548561                     0                     0
-    ## LYZ     1.08270903939139                     0                     0
-    ## HLA-DRA 1.13881691754494                     0                     0
-    ## IGKC    0.69649805568761                     0                     0
-    ## CD74    1.37040019152026 6.00496990105324e-272 3.15447280940155e-269
+    ##                     mean            total              tech              bio
+    ##                <numeric>        <numeric>         <numeric>        <numeric>
+    ## S100A9  2.19635761188417  9.9921611783313 0.812459482093853 9.17970169623745
+    ## S100A8  1.96333931256695  8.9185913683661 0.825600780035344 8.09299058833076
+    ## LYZ       2.144445380119   8.871163376052 0.815450514367692 8.05571286168431
+    ## HLA-DRA 2.25495356643387 5.46022312130995 0.808059791165969 4.65216333014398
+    ## CD74    2.83875237521701 4.48816089915459 0.772655780129843 3.71550511902475
+    ## IGKC    1.01035988303756  4.4247505696434 0.727408602628664 3.69734196701473
+    ##                       p.value                   FDR
+    ##                     <numeric>             <numeric>
+    ## S100A9                      0                     0
+    ## S100A8  1.48282482742041e-248 7.53077302352581e-245
+    ## LYZ     2.11182408062784e-252 1.60878758462229e-248
+    ## HLA-DRA  3.03427863892219e-87  1.15575673356546e-83
+    ## CD74     1.60410027553219e-61  4.07334529966808e-58
+    ## IGKC      1.7442340055978e-68  5.31502986185763e-65
 
-``` r
+```r
 dec$HVG <- (dec$FDR<0.00001)
 hvg_genes <- rownames(dec[dec$FDR < 0.00001, ])
 
 # plot highly variable genes
 plot(dec$mean, dec$total, pch=16, cex=0.6, xlab="Mean log-expression",
-     ylab="Variance of log-expression")
+	 ylab="Variance of log-expression")
 o <- order(dec$mean)
 lines(dec$mean[o], dec$tech[o], col="dodgerblue", lwd=2)
 points(dec$mean[dec$HVG], dec$total[dec$HVG], col="red", pch=16)
@@ -630,7 +636,7 @@ points(dec$mean[dec$HVG], dec$total[dec$HVG], col="red", pch=16)
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
-``` r
+```r
 ## save the decomposed variance table and hvg_genes into metadata for safekeeping
 metadata(pbmc.sce)$hvg_genes <- hvg_genes
 metadata(pbmc.sce)$dec_var <- dec
@@ -639,8 +645,8 @@ metadata(pbmc.sce)$dec_var <- dec
 We choose genes that have a biological component that is significantly
 greater than zero, using a false discovery rate (FDR) of 5%.
 
-``` r
-plotExpression(pbmc.sce, features = top.hvgs[1:10])
+```r
+plotExpression(pbmc.sce, features = rownames(dec[top.hvgs[1:10],]))
 ```
 
 ![](QC_Normalization_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
@@ -653,14 +659,12 @@ its mean. For each gene, the variance of standardized values is computed
 across all cells and used to rank the features. By default, 2000 top
 genes are returned.
 
-``` r
+```r
 pbmc.seu <- FindVariableFeatures(pbmc.seu, selection.method = "vst")
 top10 <- head(VariableFeatures(pbmc.seu), 10)
 vplot <- VariableFeaturePlot(pbmc.seu)
-LabelPoints(plot = vplot, points = top10, repel = TRUE)
+LabelPoints(plot = vplot, points = top10, repel = TRUE, xnudge = 0, ynudge = 0)
 ```
-
-    ## When using repel, set xnudge and ynudge to 0 for optimal results
 
     ## Warning: Transformation introduced infinite values in continuous x-axis
 
@@ -669,100 +673,83 @@ LabelPoints(plot = vplot, points = top10, repel = TRUE)
 How many of the variable genes detected with scran are included in
 VariableFeatures in Seurat?
 
-``` r
+```r
 table(hvg_genes %in% VariableFeatures(pbmc.seu))
 ```
 
     ## 
     ## FALSE  TRUE 
-    ##   509   795
+    ##     5    70
 
 ### Session info
 
-``` r
+```r
 sessionInfo()
 ```
 
-    ## R version 3.5.3 (2019-03-11)
+    ## R version 3.6.1 (2019-07-05)
     ## Platform: x86_64-w64-mingw32/x64 (64-bit)
-    ## Running under: Windows 10 x64 (build 17763)
+    ## Running under: Windows 10 x64 (build 18362)
     ## 
     ## Matrix products: default
     ## 
     ## locale:
-    ## [1] LC_COLLATE=English_United States.1252 
-    ## [2] LC_CTYPE=English_United States.1252   
-    ## [3] LC_MONETARY=English_United States.1252
-    ## [4] LC_NUMERIC=C                          
-    ## [5] LC_TIME=English_United States.1252    
+    ## [1] LC_COLLATE=Dutch_Netherlands.1252  LC_CTYPE=Dutch_Netherlands.1252   
+    ## [3] LC_MONETARY=Dutch_Netherlands.1252 LC_NUMERIC=C                      
+    ## [5] LC_TIME=Dutch_Netherlands.1252    
     ## 
     ## attached base packages:
     ## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
     ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] Matrix_1.2-17               scran_1.10.2               
-    ##  [3] scater_1.10.1               ggplot2_3.1.1              
-    ##  [5] SingleCellExperiment_1.4.1  SummarizedExperiment_1.12.0
-    ##  [7] DelayedArray_0.8.0          BiocParallel_1.16.6        
-    ##  [9] matrixStats_0.54.0          Biobase_2.42.0             
-    ## [11] GenomicRanges_1.34.0        GenomeInfoDb_1.18.2        
-    ## [13] IRanges_2.16.0              S4Vectors_0.20.1           
-    ## [15] BiocGenerics_0.28.0         Seurat_3.0.1               
+    ##  [1] Matrix_1.2-18               scran_1.14.6               
+    ##  [3] scater_1.14.6               ggplot2_3.3.2              
+    ##  [5] SingleCellExperiment_1.8.0  SummarizedExperiment_1.16.1
+    ##  [7] DelayedArray_0.12.3         BiocParallel_1.20.1        
+    ##  [9] matrixStats_0.56.0          Biobase_2.46.0             
+    ## [11] GenomicRanges_1.38.0        GenomeInfoDb_1.22.1        
+    ## [13] IRanges_2.20.2              S4Vectors_0.24.4           
+    ## [15] BiocGenerics_0.32.0         Seurat_3.2.0               
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] Rtsne_0.15               ggbeeswarm_0.6.0        
-    ##   [3] colorspace_1.4-1         ggridges_0.5.1          
-    ##   [5] dynamicTreeCut_1.63-1    XVector_0.22.0          
-    ##   [7] BiocNeighbors_1.0.0      listenv_0.7.0           
-    ##   [9] npsurv_0.4-0             bit64_0.9-7             
-    ##  [11] ggrepel_0.8.1            codetools_0.2-16        
-    ##  [13] splines_3.5.3            R.methodsS3_1.7.1       
-    ##  [15] lsei_1.2-0               knitr_1.23              
-    ##  [17] jsonlite_1.6             ica_1.0-2               
-    ##  [19] cluster_2.0.9            png_0.1-7               
-    ##  [21] R.oo_1.22.0              HDF5Array_1.10.1        
-    ##  [23] sctransform_0.2.0        compiler_3.5.3          
-    ##  [25] httr_1.4.0               assertthat_0.2.1        
-    ##  [27] lazyeval_0.2.2           limma_3.38.3            
-    ##  [29] htmltools_0.3.6          tools_3.5.3             
-    ##  [31] rsvd_1.0.0               igraph_1.2.4.1          
-    ##  [33] gtable_0.3.0             glue_1.3.1              
-    ##  [35] GenomeInfoDbData_1.2.0   RANN_2.6.1              
-    ##  [37] reshape2_1.4.3           dplyr_0.8.1             
-    ##  [39] Rcpp_1.0.1               gdata_2.18.0            
-    ##  [41] ape_5.3                  nlme_3.1-140            
-    ##  [43] DelayedMatrixStats_1.4.0 gbRd_0.4-11             
-    ##  [45] lmtest_0.9-37            xfun_0.7                
-    ##  [47] stringr_1.4.0            globals_0.12.4          
-    ##  [49] irlba_2.3.3              gtools_3.8.1            
-    ##  [51] statmod_1.4.30           future_1.13.0           
-    ##  [53] edgeR_3.24.3             MASS_7.3-51.4           
-    ##  [55] zlibbioc_1.28.0          zoo_1.8-5               
-    ##  [57] scales_1.0.0             rhdf5_2.26.2            
-    ##  [59] RColorBrewer_1.1-2       yaml_2.2.0              
-    ##  [61] reticulate_1.12          pbapply_1.4-0           
-    ##  [63] gridExtra_2.3            stringi_1.4.3           
-    ##  [65] caTools_1.17.1.2         bibtex_0.4.2            
-    ##  [67] Rdpack_0.11-0            SDMTools_1.1-221.1      
-    ##  [69] rlang_0.3.4              pkgconfig_2.0.2         
-    ##  [71] bitops_1.0-6             evaluate_0.13           
-    ##  [73] lattice_0.20-38          ROCR_1.0-7              
-    ##  [75] purrr_0.3.2              Rhdf5lib_1.4.3          
-    ##  [77] labeling_0.3             htmlwidgets_1.3         
-    ##  [79] bit_1.1-14               cowplot_0.9.4           
-    ##  [81] tidyselect_0.2.5         plyr_1.8.4              
-    ##  [83] magrittr_1.5             R6_2.4.0                
-    ##  [85] gplots_3.0.1.1           pillar_1.4.0            
-    ##  [87] withr_2.1.2              fitdistrplus_1.0-14     
-    ##  [89] survival_2.44-1.1        RCurl_1.95-4.12         
-    ##  [91] tibble_2.1.1             future.apply_1.2.0      
-    ##  [93] tsne_0.1-3               hdf5r_1.2.0             
-    ##  [95] crayon_1.3.4             KernSmooth_2.23-15      
-    ##  [97] plotly_4.9.0             rmarkdown_1.13          
-    ##  [99] viridis_0.5.1            locfit_1.5-9.1          
-    ## [101] grid_3.5.3               data.table_1.12.2       
-    ## [103] metap_1.1                digest_0.6.19           
-    ## [105] tidyr_0.8.3              R.utils_2.8.0           
-    ## [107] munsell_0.5.0            beeswarm_0.2.3          
-    ## [109] viridisLite_0.3.0        vipor_0.4.5
+    ##   [1] plyr_1.8.6               igraph_1.2.5             lazyeval_0.2.2          
+    ##   [4] splines_3.6.1            listenv_0.8.0            digest_0.6.25           
+    ##   [7] htmltools_0.5.0          viridis_0.5.1            magrittr_1.5            
+    ##  [10] tensor_1.5               cluster_2.1.0            ROCR_1.0-11             
+    ##  [13] limma_3.42.2             globals_0.12.5           colorspace_1.4-1        
+    ##  [16] rappdirs_0.3.1           ggrepel_0.8.2            xfun_0.17               
+    ##  [19] dplyr_1.0.2              crayon_1.3.4             RCurl_1.95-4.12         
+    ##  [22] jsonlite_1.7.0           spatstat_1.64-1          spatstat.data_1.4-3     
+    ##  [25] survival_3.2-3           zoo_1.8-8                ape_5.4-1               
+    ##  [28] glue_1.4.1               polyclip_1.10-0          gtable_0.3.0            
+    ##  [31] zlibbioc_1.32.0          XVector_0.26.0           leiden_0.3.3            
+    ##  [34] BiocSingular_1.2.2       future.apply_1.6.0       abind_1.4-5             
+    ##  [37] scales_1.1.1             edgeR_3.28.1             miniUI_0.1.1.1          
+    ##  [40] Rcpp_1.0.5               viridisLite_0.3.0        xtable_1.8-4            
+    ##  [43] reticulate_1.16          dqrng_0.2.1              bit_1.1-14              
+    ##  [46] rsvd_1.0.3               htmlwidgets_1.5.1        httr_1.4.2              
+    ##  [49] RColorBrewer_1.1-2       ellipsis_0.3.1           ica_1.0-2               
+    ##  [52] pkgconfig_2.0.3          farver_2.0.3             uwot_0.1.8              
+    ##  [55] deldir_0.1-28            locfit_1.5-9.4           tidyselect_1.1.0        
+    ##  [58] labeling_0.3             rlang_0.4.7              reshape2_1.4.4          
+    ##  [61] later_1.1.0.1            munsell_0.5.0            tools_3.6.1             
+    ##  [64] generics_0.0.2           ggridges_0.5.2           evaluate_0.14           
+    ##  [67] stringr_1.4.0            fastmap_1.0.1            yaml_2.2.1              
+    ##  [70] goftest_1.2-2            knitr_1.29               bit64_0.9-7             
+    ##  [73] fitdistrplus_1.1-1       purrr_0.3.4              RANN_2.6.1              
+    ##  [76] pbapply_1.4-3            future_1.18.0            nlme_3.1-148            
+    ##  [79] mime_0.9                 hdf5r_1.3.3              compiler_3.6.1          
+    ##  [82] beeswarm_0.2.3           plotly_4.9.2.1           png_0.1-7               
+    ##  [85] spatstat.utils_1.17-0    tibble_3.0.3             statmod_1.4.34          
+    ##  [88] stringi_1.4.6            lattice_0.20-41          vctrs_0.3.2             
+    ##  [91] pillar_1.4.6             lifecycle_0.2.0          lmtest_0.9-37           
+    ##  [94] RcppAnnoy_0.0.16         BiocNeighbors_1.4.2      data.table_1.13.0       
+    ##  [97] cowplot_1.1.0            bitops_1.0-6             irlba_2.3.3             
+    ## [100] httpuv_1.5.4             patchwork_1.0.1          R6_2.4.1                
+    ## [103] promises_1.1.1           KernSmooth_2.23-17       gridExtra_2.3           
+    ## [106] vipor_0.4.5              codetools_0.2-16         MASS_7.3-52             
+    ## [109] withr_2.2.0              sctransform_0.2.1        GenomeInfoDbData_1.2.2  
+    ## [112] mgcv_1.8-32              grid_3.6.1               rpart_4.1-15            
+    ## [115] tidyr_1.1.1              rmarkdown_2.3            DelayedMatrixStats_1.8.0
+    ## [118] Rtsne_0.15               shiny_1.5.0              ggbeeswarm_0.6.0

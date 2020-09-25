@@ -87,10 +87,7 @@ head(alldata@meta.data)
 We will manually calculate the proportion of mitochondrial reads and add to the metadata table.
 
 ```{r QC1}
-mt.genes <- rownames(alldata)[grep("^MT-",rownames(alldata))]
-C <- GetAssayData(object = alldata, slot = "counts")
-
-percent.mito <- colSums(C[mt.genes,])/Matrix::colSums(C)*100
+percent.mito <- PercentageFeatureSet(alldata, pattern = "^MT-")
 alldata <- AddMetaData(alldata, percent.mito, col.name = "percent.mito")
 ```
 
@@ -99,8 +96,7 @@ alldata <- AddMetaData(alldata, percent.mito, col.name = "percent.mito")
 In the same manner we will calculate the proportion gene expression that comes from ribosomal proteins.
 
 ```{r QC2}
-rb.genes <- rownames(alldata)[grep("^RP[SL]",rownames(alldata))]
-percent.ribo <- colSums(C[rb.genes,])/Matrix::colSums(C)*100
+percent.ribo <- PercentageFeatureSet(alldata, pattern = "^RP[SL]")
 alldata <- AddMetaData(alldata, percent.ribo, col.name = "percent.ribo")
 ```
 
@@ -167,7 +163,8 @@ Looking at the plots, make resonable decisions on where to draw the cutoff. In t
 
 ```{r mito.filt}
 #select cells with percent.mito < 25
-selected <- WhichCells(alldata, expression = percent.mito < 25)
+idx <- which(alldata$percent.mito < 25)
+selected <- WhichCells(alldata, cells = idx)
 length(selected)
 
 # and subset the object to only keep those cells
@@ -257,23 +254,21 @@ set.seed(32546)
 
 To speed things up, we will continue working with the v3.1k dataset only. We will convert the Seurat object to a SCE object to work with the scater package. You can read more about SCE objects [here](https://osca.bioconductor.org/data-infrastructure.html#the-singlecellexperiment-class). 
 
-Note: to create an SCE object directly from the count matrices, have a look at their tutorial at: https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/vignette-intro.html. 
+Note: to create an SCE object directly from the count matrices, have a look at their tutorial at: https://bioconductor.org/packages/release/bioc/vignettes/scater/inst/doc/overview.html. 
 
 ```{r select_dataset}
 pbmc.sce <- SingleCellExperiment(assays = list(counts = as.matrix(v3.1k)))
 pbmc.sce <- pbmc.sce[rowSums(counts(pbmc.sce) > 0) > 2,]
 isSpike(pbmc.sce, "MT") <- grepl("^MT-", rownames(pbmc.sce))
 pbmc.sce <- calculateQCMetrics(pbmc.sce)
-colnames(colData(pbmc.sce))
+print(colnames(colData(pbmc.sce)))
 ```
 
 Filter out poor quality cells to avoid negative size factors. These steps are very similar to what we have already done on the combined Seurat object but now we perform them on one dataset only using the Scater package.
 
 ```{r filter_poor_quality}
-pbmc.sce <- filter(pbmc.sce, pct_counts_MT < 20)
-pbmc.sce <- filter(pbmc.sce, 
-                   total_features_by_counts > 1000 & 
-                     total_features_by_counts < 4100)
+pbmc.sce <- pbmc.sce[, pbmc.sce$pct_counts_MT < 20]
+pbmc.sce <- pbmc.sce[, (pbmc.sce$total_features_by_counts > 1000 & pbmc.sce$total_features_by_counts < 4100)]
 ```
 
 Create a new assay with unnormalized counts for comparison to post-normalization.
@@ -293,7 +288,7 @@ scater::plotPCA(raw.sce, colour_by = "total_counts")
 Plot the expression of the B cell marker MS4A1.
 
 ```{r}
-plotReducedDim(raw.sce, use_dimred = "PCA", by_exprs_values = "logcounts_raw",
+plotReducedDim(raw.sce, dimred = "PCA", by_exprs_values = "logcounts_raw",
                colour_by = "MS4A1")
 ```
 
@@ -323,7 +318,7 @@ scater::plotPCA(pbmc.seu.sce, colour_by = "total_counts")
 ```
 
 ```{r}
-plotReducedDim(pbmc.seu.sce, use_dimred = "PCA", colour_by = "MS4A1")
+plotReducedDim(pbmc.seu.sce, dimred = "PCA", colour_by = "MS4A1")
 ```
 
 
@@ -352,11 +347,8 @@ scater::plotPCA(pbmc.sce, colour_by = "total_counts")
 
 
 ```{r}
-plotReducedDim(pbmc.sce, use_dimred = "PCA", colour_by = "MS4A1")
+plotReducedDim(pbmc.sce, dimred = "PCA", colour_by = "MS4A1")
 ```
-
-
-
 ## 3. Feature selection
 
 ### Feature selection: scran
@@ -364,8 +356,7 @@ plotReducedDim(pbmc.sce, use_dimred = "PCA", colour_by = "MS4A1")
 In the scran method for finding HVGs, a trend is first fitted to the technical variances. In the absence of spike-ins, this is done using the whole data, assuming that the majority of genes are not variably expressed. Then, the biological component of the variance for each endogenous gene is computed by subtracting the fitted value of the trend from the total variance. HVGs are then identified as those genes with the largest biological components. This avoids prioritizing genes that are highly variable due to technical factors such as sampling noise during RNA capture and library preparation. see the [scran vignette](https://bioconductor.org/packages/devel/bioc/vignettes/scran/inst/doc/scran.html#5_variance_modelling) for details.
 
 ```{r}
-fit <- scran::trendVar(pbmc.sce, use.spikes = NA)
-dec <- scran::decomposeVar(pbmc.sce, fit)
+dec <- modelGeneVar(pbmc.sce)
 dec <- dec[!is.na(dec$FDR),]
 
 top.hvgs <- order(dec$bio, decreasing = TRUE)
@@ -389,18 +380,18 @@ metadata(pbmc.sce)$dec_var <- dec
 We choose genes that have a biological component that is significantly greater than zero, using a false discovery rate (FDR) of 5%.
 
 ```{r}
-plotExpression(pbmc.sce, features = top.hvgs[1:10])
+plotExpression(pbmc.sce, features = rownames(dec[top.hvgs[1:10],]))
 ```
 
 ### Feature selection: Seurat
 
 The default method in Seurat 3 is variance-stabilizing transformation. A trend is fitted to to predict the variance of each gene as a function of its mean. For each gene, the variance of standardized values is computed across all cells and used to rank the features. By default, 2000 top genes are returned.
- 
+
 ```{r}
 pbmc.seu <- FindVariableFeatures(pbmc.seu, selection.method = "vst")
 top10 <- head(VariableFeatures(pbmc.seu), 10)
 vplot <- VariableFeaturePlot(pbmc.seu)
-LabelPoints(plot = vplot, points = top10, repel = TRUE)
+LabelPoints(plot = vplot, points = top10, repel = TRUE, xnudge = 0, ynudge = 0)
 ```
 
 How many of the variable genes detected with scran are included in VariableFeatures in Seurat?
@@ -414,4 +405,8 @@ table(hvg_genes %in% VariableFeatures(pbmc.seu))
 
 ```{r}
 sessionInfo()
+```
+
+```{r}
+
 ```
