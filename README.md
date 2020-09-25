@@ -8,8 +8,13 @@ The course features a mix of lectures and practicals, and you will have the oppo
 19 – 23 October, 2020
 
 ### On-line course
-The course will take place online. We will use Kaltura Live Room.
-Participants will receive information about joining the sessions by email.  
+The course will take place online. For this, we are going to use MS Teams. In the coming days, you will receive an invitation to join the course team. Please note the following:
+- Please make sure to download the desktop application (if possible). This usually works better than the web application.
+- After clicking on the invitation link, you might need to restart the application to see the course Team in your list of teams.
+- In the course team, there are multiple channels. The "Lecture Room" is the main channel where we will have out lecture meetings. Please go there and join the meeting at the time of lectures.
+- During the lecture, please make sure you are muted. As much as possible, please keep your camera on. If you want to ask questions, please use the "Raise your hand" button.
+- For the Lab sessions, please work on the exercises of the session (on GitHub). If you have questions, post them in the "Questions - Lab Exercises" channel and one of the TAs will answer you as soon as possible. If necessary, you can "meet" the TA in their own channel to have a meeting and share screens.
+- Please make sure to join at least 10min early on the first day to ensure that everything works for you.
 
 ### [Programme](Programme.md)
 
