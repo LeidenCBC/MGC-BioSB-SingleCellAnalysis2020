@@ -17,7 +17,7 @@ In this tutorial we will look at different ways of integrating multiple single c
 
 ## Datasets
 
-For this tutorial we will use 3 different human pancreatic islet cell datasets from four technologies, CelSeq (GSE81076) CelSeq2 (GSE85241), Fluidigm C1 (GSE86469), and SMART-Seq2 (E-MTAB-5061). The raw data matrix and associated metadata are available [here](https://www.dropbox.com/s/1zxbn92y5du9pu0/pancreas_v3_files.tar.gz?dl=1).
+For this tutorial we will use 3 different human pancreatic islet cell datasets from four technologies, CelSeq (GSE81076), CelSeq2 (GSE85241), Fluidigm C1 (GSE86469), and SMART-Seq2 (E-MTAB-5061). The raw data matrix and associated metadata are available [here](https://www.dropbox.com/s/1zxbn92y5du9pu0/pancreas_v3_files.tar.gz?dl=1).
 
 
 Load required packages:
@@ -30,6 +30,7 @@ suppressMessages(require(scater))
 suppressMessages(require(scran))
 suppressMessages(require(BiocParallel))
 suppressMessages(require(BiocNeighbors))
+suppressMessages(require(batchelor))
 ```
 
 ## Seurat (anchors and CCA)
@@ -41,8 +42,8 @@ First we will use the data integration method presented in [Comprehensive Integr
 Load in expression matrix and metadata. The metadata file contains the technology (`tech` column) and cell type annotations (`cell type` column) for each cell in the four datasets.
 
 ```{r load}
-pancreas.data <- readRDS(file = "~/scrna-seq2019/day1/3-integration/pancreas_expression_matrix.rds")
-metadata <- readRDS(file = "~/scrna-seq2019/day1/3-integration/pancreas_metadata.rds")
+pancreas.data <- readRDS(file = "session-integration_files/pancreas_expression_matrix.rds")
+metadata <- readRDS(file = "session-integration_files/pancreas_metadata.rds")
 ```
 
 Create a Seurat object with all datasets.
@@ -61,7 +62,7 @@ pancreas <- FindVariableFeatures(pancreas, selection.method = "vst", nfeatures =
 # Run the standard workflow for visualization and clustering
 pancreas <- ScaleData(pancreas, verbose = FALSE)
 pancreas <- RunPCA(pancreas, npcs = 30, verbose = FALSE)
-pancreas <- RunUMAP(pancreas, reduction = "pca", dims = 1:30)
+pancreas <- RunUMAP(pancreas, reduction = "pca", dims = 1:30, verbose = FALSE)
 p1 <- DimPlot(pancreas, reduction = "umap", group.by = "tech")
 p2 <- DimPlot(pancreas, reduction = "umap", group.by = "celltype", label = TRUE, repel = TRUE) + 
     NoLegend()
@@ -108,7 +109,7 @@ DefaultAssay(pancreas.integrated) <- "integrated"
 # Run the standard workflow for visualization and clustering
 pancreas.integrated <- ScaleData(pancreas.integrated, verbose = FALSE)
 pancreas.integrated <- RunPCA(pancreas.integrated, npcs = 30, verbose = FALSE)
-pancreas.integrated <- RunUMAP(pancreas.integrated, reduction = "pca", dims = 1:30)
+pancreas.integrated <- RunUMAP(pancreas.integrated, reduction = "pca", dims = 1:30, verbose = FALSE)
 p1 <- DimPlot(pancreas.integrated, reduction = "umap", group.by = "tech")
 p2 <- DimPlot(pancreas.integrated, reduction = "umap", group.by = "celltype", label = TRUE, repel = TRUE) + 
     NoLegend()
@@ -187,26 +188,22 @@ Feature selection: we use the `trendVar()` and `decomposeVar()` functions to cal
 
 ```{r sce_fs}
 ## celseq.data
-fit_celseq.data <- trendVar(celseq.data, use.spikes=FALSE) 
-dec_celseq.data <- decomposeVar(celseq.data, fit_celseq.data)
+dec_celseq.data <- modelGeneVar(celseq.data)
 dec_celseq.data$Symbol_TENx <- rowData(celseq.data)$Symbol_TENx
 dec_celseq.data <- dec_celseq.data[order(dec_celseq.data$bio, decreasing = TRUE), ]
 
 ## celseq2.data
-fit_celseq2.data <- trendVar(celseq2.data, use.spikes=FALSE) 
-dec_celseq2.data <- decomposeVar(celseq2.data, fit_celseq2.data)
+dec_celseq2.data <- modelGeneVar(celseq2.data)
 dec_celseq2.data$Symbol_TENx <- rowData(celseq2.data)$Symbol_TENx
 dec_celseq2.data <- dec_celseq2.data[order(dec_celseq2.data$bio, decreasing = TRUE), ]
 
 ## fluidigmc1.data
-fit_fluidigmc1.data <- trendVar(fluidigmc1.data, use.spikes=FALSE) 
-dec_fluidigmc1.data <- decomposeVar(fluidigmc1.data, fit_fluidigmc1.data)
+dec_fluidigmc1.data <- modelGeneVar(fluidigmc1.data)
 dec_fluidigmc1.data$Symbol_TENx <- rowData(fluidigmc1.data)$Symbol_TENx
 dec_fluidigmc1.data <- dec_fluidigmc1.data[order(dec_fluidigmc1.data$bio, decreasing = TRUE), ]
 
 ## smartseq2.data
-fit_smartseq2.data <- trendVar(smartseq2.data, use.spikes=FALSE) 
-dec_smartseq2.data <- decomposeVar(smartseq2.data, fit_smartseq2.data)
+dec_smartseq2.data <- modelGeneVar(smartseq2.data)
 dec_smartseq2.data$Symbol_TENx <- rowData(smartseq2.data)$Symbol_TENx
 dec_smartseq2.data <- dec_smartseq2.data[order(dec_smartseq2.data$bio, decreasing = TRUE), ]
 
@@ -246,14 +243,13 @@ Let's first look at the datasets before applying MNN batch correction.
 ```{r sce_visualize, warning=FALSE}
 sce <- runPCA(sce,
               ncomponents = 20,
-              feature_set = hvg_genes,
-              method = "irlba")
+              subset_row = hvg_genes)
 
 names(reducedDims(sce)) <- "PCA_naive" 
 
-p1 <- plotReducedDim(sce, use_dimred = "PCA_naive", colour_by = "tech") + 
+p1 <- plotReducedDim(sce, dimred = "PCA_naive", colour_by = "tech") + 
     ggtitle("PCA Without batch correction")
-p2 <- plotReducedDim(sce, use_dimred = "PCA_naive", colour_by = "celltype") + 
+p2 <- plotReducedDim(sce, dimred = "PCA_naive", colour_by = "celltype") + 
     ggtitle("PCA Without batch correction")
 plot_grid(p1, p2)
 ```
@@ -282,11 +278,11 @@ mnn_out <- fastMNN(celseq.data_rescaled,
                    fluidigmc1.data_rescaled,
                    smartseq2.data_rescaled,
                    subset.row = metadata(sce)$hvg_genes,
-                   k = 20, d = 50, approximate = TRUE,
+                   k = 20, d = 50,
                    # BPPARAM = BiocParallel::MulticoreParam(8),
                    BNPARAM = BiocNeighbors::AnnoyParam())
 
-reducedDim(sce, "MNN") <- mnn_out$correct
+reducedDim(sce, "MNN") <- reducedDim(mnn_out)
 ```
 
 **NOTE:** fastMNN() does not produce a batch-corrected expression matrix. Thus, the result from fastMNN() should solely be treated as a reduced dimensionality representation, suitable for direct plotting, TSNE/UMAP, clustering, and trajectory analysis that relies on such results.
@@ -295,8 +291,8 @@ reducedDim(sce, "MNN") <- mnn_out$correct
 Plot the batch-corrected data.
 
 ```{r MNN_plot, warning=FALSE}
-p1 <- plotReducedDim(sce, use_dimred = "MNN", colour_by = "tech") + ggtitle("MNN Ouput Reduced Dimensions")
-p2 <- plotReducedDim(sce, use_dimred = "MNN", colour_by = "celltype") + ggtitle("MNN Ouput Reduced Dimensions")
+p1 <- plotReducedDim(sce, dimred = "MNN", colour_by = "tech") + ggtitle("MNN Ouput Reduced Dimensions")
+p2 <- plotReducedDim(sce, dimred = "MNN", colour_by = "celltype") + ggtitle("MNN Ouput Reduced Dimensions")
 plot_grid(p1, p2)
 ```
 
