@@ -34,7 +34,7 @@ in the original publication (it is the `cell_type2` column in the
 
 ``` r
 #load expression matrix
-deng <- readRDS("session-clustering_files/deng-reads.rds")
+deng <- readRDS("deng-reads.rds")
 deng
 ```
 
@@ -50,6 +50,7 @@ deng
     ##   is_cell_control
     ## reducedDimNames(0):
     ## spikeNames(1): ERCC
+    ## altExpNames(0):
 
 ``` r
 #look at the cell type annotation
@@ -65,12 +66,12 @@ table(colData(deng)$cell_type2)
 ## Feature selection
 
 The first step is to decide which genes to use in clustering the cells.
-Single cell RNA-seq can profile a huge number of genes in a lot of cells.
-But most of the genes are not expressed enough to provide a meaningful
-signal and are often driven by technical noise. Including them could
-potentially add some unwanted signal that would blur the biological
-variation. Moreover gene filtering can also speed up the computational
-time for downstream analysis.
+Single cell RNA-seq can profile a huge number of genes in a lot of
+cells. But most of the genes are not expressed enough to provide a
+meaningful signal and are often driven by technical noise. Including
+them could potentially add some unwanted signal that would blur the
+biological variation. Moreover gene filtering can also speed up the
+computational time for downstream analysis.
 
 First let’s have a look at the average expression and the variance of
 all genes. Which genes seem less important and which are likely to be
@@ -92,7 +93,7 @@ ggplot(data=gene_stat_df ,aes(x=log(gene_mean), y=log(gene_var))) + geom_point(s
 
 #### Filtering out low abundance genes
 
-Low-abundance genes are mostly non-informative and are not
+Low-abundance genes are mostly non informative and are not
 representative of the biological variance of the data. They are often
 driven by technical noise such as dropout event. However, their presence
 in downstream analysis leads often to a lower accuracy since they can
@@ -159,16 +160,15 @@ highly variable genes.
 mean.
 
 ``` r
-# out <- technicalCV2(deng, spike.type=NA, assay.type= "counts")
+# out <- modelGeneCV2(deng, assay.type= "counts")
 # out$genes <- rownames(deng)
 # out$HVG <- (out$FDR<0.05)
-# as_tibble(out)
-# 
-# # plot highly variable genes
-# ggplot(data = out) + geom_point(aes(x=log2(mean), y=log2(cv2), color=HVG), size=0.5) + geom_point(aes(x=log2(mean), y=log2(trend)), color="red", size=0.1)
-# 
-# ## save the HVG into metadata for safekeeping
-# metadata(deng)$hvg_genes <- rownames(deng)[out$HVG]
+# out <- as_tibble(out)
+
+# plot highly variable genes
+# ggplot(data = out) + 
+#     geom_point(aes(x=log2(mean), y=log2(total), color=HVG), size=0.5) + 
+#     geom_point(aes(x=log2(mean), y=log2(trend)), color="red", size=0.1)
 ```
 
 **Option 2:** Model the variance of the biological component as a
@@ -214,13 +214,13 @@ dimensionality reduction methods (e.g. PCA, tSNE, and UMAP)
 
 ``` r
 #PCA (select the number of components to calculate)
-deng <- runPCA(deng, method = "irlba",
+deng <- runPCA(deng,
              ncomponents = 30,
-             feature_set = metadata(deng)$hvg_genes)
+             subset_row = metadata(deng)$hvg_genes)
 
 #Make a scree plot (percentage variance explained per PC) to determine the number of relevant components
 X <- attributes(deng@reducedDims$PCA)
-plot(X$percentVar~c(1:30), type="b", lwd=1, ylab="Percentage variance" , xlab="PCs" , bty="l" , pch=1)
+plot(attr(reducedDim(deng), "percentVar")~c(1:30), type="b", lwd=1, ylab="Percentage variance" , xlab="PCs" , bty="l" , pch=1)
 ```
 
 ![](Clustering_files/figure-gfm/pca-1.png)<!-- -->
@@ -324,7 +324,7 @@ Instead of changing the distance metric, we can change the linkage
 method. Instead of using Ward’s method, let’s use complete linkage.
 
 ``` r
-# Calculate distances (default: Eucledian distance)
+# Calculate Distances (default: Eucledian distance)
 distance_eucledian <- dist(t(logcounts(deng)))
 
 #Perform hierarchical clustering using ward linkage
@@ -348,11 +348,11 @@ plot_grid(plotReducedDim(deng, "PCA", colour_by = "cluster_hclust"),
 
 ![](Clustering_files/figure-gfm/hierarchical_eucledian_complete_pcaplot-1.png)<!-- -->
 
-### tSNE + Kmeans
+### TSNE + Kmeans
 
 ``` r
-# Do kmeans algorithm on tSNE coordinates
-deng_kmeans <- kmeans(x = deng@reducedDims$TSNE,centers = 10)
+# Do kmeans algorithm on TSNE coordinates
+deng_kmeans <- kmeans(x = reducedDim(deng, "TSNE"),centers = 10)
 TSNE_kmeans <- factor(deng_kmeans$cluster)
 colData(deng)$TSNE_kmeans <- TSNE_kmeans
 #Compare with ground truth
@@ -390,93 +390,87 @@ plot_grid(p5+ guides(fill=guide_legend(ncol=1)),p30)
 sessionInfo()
 ```
 
-    ## R version 3.5.3 (2019-03-11)
-    ## Platform: x86_64-w64-mingw32/x64 (64-bit)
-    ## Running under: Windows 10 x64 (build 17763)
+    ## R version 3.6.1 (2019-07-05)
+    ## Platform: x86_64-conda_cos6-linux-gnu (64-bit)
+    ## Running under: KDE neon User Edition 5.19
     ## 
     ## Matrix products: default
+    ## BLAS/LAPACK: /home/mochar/anaconda3/envs/poep/lib/R/lib/libRblas.so
     ## 
     ## locale:
-    ## [1] LC_COLLATE=English_United States.1252 
-    ## [2] LC_CTYPE=English_United States.1252   
-    ## [3] LC_MONETARY=English_United States.1252
-    ## [4] LC_NUMERIC=C                          
-    ## [5] LC_TIME=English_United States.1252    
+    ## [1] nl_NL.UTF-8
     ## 
     ## attached base packages:
     ## [1] parallel  stats4    stats     graphics  grDevices utils     datasets 
     ## [8] methods   base     
     ## 
     ## other attached packages:
-    ##  [1] igraph_1.2.4.1              scran_1.10.2               
-    ##  [3] scater_1.10.1               SingleCellExperiment_1.4.1 
-    ##  [5] SummarizedExperiment_1.12.0 DelayedArray_0.8.0         
-    ##  [7] BiocParallel_1.16.6         matrixStats_0.54.0         
-    ##  [9] Biobase_2.42.0              GenomicRanges_1.34.0       
-    ## [11] GenomeInfoDb_1.18.2         IRanges_2.16.0             
-    ## [13] S4Vectors_0.20.1            BiocGenerics_0.28.0        
-    ## [15] cowplot_0.9.4               Seurat_3.0.0               
+    ##  [1] igraph_1.2.4.1              scran_1.14.6               
+    ##  [3] scater_1.14.6               SingleCellExperiment_1.8.0 
+    ##  [5] SummarizedExperiment_1.16.1 DelayedArray_0.12.3        
+    ##  [7] BiocParallel_1.20.1         matrixStats_0.57.0         
+    ##  [9] Biobase_2.46.0              GenomicRanges_1.38.0       
+    ## [11] GenomeInfoDb_1.22.1         IRanges_2.20.2             
+    ## [13] S4Vectors_0.24.4            BiocGenerics_0.32.0        
+    ## [15] cowplot_1.1.0               Seurat_3.0.2               
     ## [17] forcats_0.4.0               stringr_1.4.0              
     ## [19] dplyr_0.8.0.1               purrr_0.3.2                
     ## [21] readr_1.3.1                 tidyr_0.8.3                
-    ## [23] tibble_2.1.1                ggplot2_3.1.1              
+    ## [23] tibble_2.1.1                ggplot2_3.3.2              
     ## [25] tidyverse_1.2.1            
     ## 
     ## loaded via a namespace (and not attached):
-    ##   [1] readxl_1.3.1             backports_1.1.4         
-    ##   [3] plyr_1.8.4               lazyeval_0.2.2          
-    ##   [5] splines_3.5.3            listenv_0.7.0           
-    ##   [7] digest_0.6.18            htmltools_0.3.6         
-    ##   [9] viridis_0.5.1            gdata_2.18.0            
-    ##  [11] magrittr_1.5             cluster_2.0.9           
-    ##  [13] ROCR_1.0-7               limma_3.38.3            
-    ##  [15] globals_0.12.4           modelr_0.1.4            
-    ##  [17] R.utils_2.8.0            colorspace_1.4-1        
-    ##  [19] rvest_0.3.3              ggrepel_0.8.1           
-    ##  [21] haven_2.1.0              xfun_0.6                
-    ##  [23] crayon_1.3.4             RCurl_1.95-4.12         
-    ##  [25] jsonlite_1.6             survival_2.44-1.1       
-    ##  [27] zoo_1.8-5                ape_5.3                 
-    ##  [29] glue_1.3.1               gtable_0.3.0            
-    ##  [31] zlibbioc_1.28.0          XVector_0.22.0          
-    ##  [33] Rhdf5lib_1.4.3           future.apply_1.2.0      
-    ##  [35] HDF5Array_1.10.1         scales_1.0.0            
-    ##  [37] edgeR_3.24.3             bibtex_0.4.2            
-    ##  [39] Rcpp_1.0.1               metap_1.1               
-    ##  [41] viridisLite_0.3.0        reticulate_1.12         
-    ##  [43] rsvd_1.0.0               SDMTools_1.1-221.1      
-    ##  [45] tsne_0.1-3               htmlwidgets_1.3         
-    ##  [47] httr_1.4.0               gplots_3.0.1.1          
-    ##  [49] RColorBrewer_1.1-2       ica_1.0-2               
-    ##  [51] pkgconfig_2.0.2          R.methodsS3_1.7.1       
-    ##  [53] locfit_1.5-9.1           dynamicTreeCut_1.63-1   
-    ##  [55] labeling_0.3             tidyselect_0.2.5        
-    ##  [57] rlang_0.3.4              reshape2_1.4.3          
-    ##  [59] munsell_0.5.0            cellranger_1.1.0        
-    ##  [61] tools_3.5.3              cli_1.1.0               
-    ##  [63] generics_0.0.2           broom_0.5.2             
-    ##  [65] ggridges_0.5.1           evaluate_0.13           
-    ##  [67] yaml_2.2.0               npsurv_0.4-0            
-    ##  [69] knitr_1.22               fitdistrplus_1.0-14     
-    ##  [71] caTools_1.17.1.2         RANN_2.6.1              
-    ##  [73] pbapply_1.4-0            future_1.13.0           
-    ##  [75] nlme_3.1-140             R.oo_1.22.0             
-    ##  [77] xml2_1.2.0               compiler_3.5.3          
-    ##  [79] rstudioapi_0.10          beeswarm_0.2.3          
-    ##  [81] plotly_4.9.0             png_0.1-7               
-    ##  [83] lsei_1.2-0               statmod_1.4.30          
-    ##  [85] stringi_1.4.3            lattice_0.20-38         
-    ##  [87] Matrix_1.2-17            pillar_1.4.0            
-    ##  [89] Rdpack_0.11-0            lmtest_0.9-37           
-    ##  [91] BiocNeighbors_1.0.0      data.table_1.12.2       
-    ##  [93] bitops_1.0-6             irlba_2.3.3             
-    ##  [95] gbRd_0.4-11              R6_2.4.0                
-    ##  [97] KernSmooth_2.23-15       gridExtra_2.3           
-    ##  [99] vipor_0.4.5              codetools_0.2-16        
-    ## [101] MASS_7.3-51.4            gtools_3.8.1            
-    ## [103] assertthat_0.2.1         rhdf5_2.26.2            
-    ## [105] withr_2.1.2              sctransform_0.2.0       
-    ## [107] GenomeInfoDbData_1.2.0   hms_0.4.2               
-    ## [109] grid_3.5.3               rmarkdown_1.12          
-    ## [111] DelayedMatrixStats_1.4.0 Rtsne_0.15              
-    ## [113] lubridate_1.7.4          ggbeeswarm_0.6.0
+    ##   [1] ggbeeswarm_0.6.0         Rtsne_0.15              
+    ##   [3] colorspace_1.4-1         ggridges_0.5.2          
+    ##   [5] XVector_0.26.0           BiocNeighbors_1.4.2     
+    ##   [7] rstudioapi_0.10          listenv_0.8.0           
+    ##   [9] ggrepel_0.8.2            lubridate_1.7.4         
+    ##  [11] xml2_1.2.0               codetools_0.2-16        
+    ##  [13] splines_3.6.1            R.methodsS3_1.8.1       
+    ##  [15] knitr_1.22               jsonlite_1.6            
+    ##  [17] broom_0.5.2              ica_1.0-2               
+    ##  [19] cluster_2.0.8            png_0.1-7               
+    ##  [21] R.oo_1.24.0              sctransform_0.3.1       
+    ##  [23] compiler_3.6.1           httr_1.4.0              
+    ##  [25] dqrng_0.2.1              backports_1.1.4         
+    ##  [27] assertthat_0.2.1         Matrix_1.2-17           
+    ##  [29] lazyeval_0.2.2           limma_3.42.2            
+    ##  [31] cli_1.1.0                BiocSingular_1.2.2      
+    ##  [33] htmltools_0.3.6          tools_3.6.1             
+    ##  [35] rsvd_1.0.3               GenomeInfoDbData_1.2.2  
+    ##  [37] gtable_0.3.0             glue_1.3.1              
+    ##  [39] RANN_2.6.1               reshape2_1.4.3          
+    ##  [41] Rcpp_1.0.1               cellranger_1.1.0        
+    ##  [43] vctrs_0.3.4              ape_5.4-1               
+    ##  [45] nlme_3.1-139             DelayedMatrixStats_1.8.0
+    ##  [47] gbRd_0.4-11              lmtest_0.9-38           
+    ##  [49] xfun_0.6                 globals_0.13.1          
+    ##  [51] rbibutils_1.3            rvest_0.3.3             
+    ##  [53] irlba_2.3.3              statmod_1.4.34          
+    ##  [55] future_1.19.1            edgeR_3.28.1            
+    ##  [57] zlibbioc_1.32.0          MASS_7.3-51.3           
+    ##  [59] zoo_1.8-6                scales_1.0.0            
+    ##  [61] hms_0.4.2                RColorBrewer_1.1-2      
+    ##  [63] yaml_2.2.0               reticulate_1.16         
+    ##  [65] pbapply_1.4-3            gridExtra_2.3           
+    ##  [67] stringi_1.4.3            bitops_1.0-6            
+    ##  [69] Rdpack_2.0               SDMTools_1.1-221.2      
+    ##  [71] rlang_0.4.7              pkgconfig_2.0.2         
+    ##  [73] evaluate_0.13            lattice_0.20-38         
+    ##  [75] ROCR_1.0-11              labeling_0.3            
+    ##  [77] htmlwidgets_1.3          tidyselect_0.2.5        
+    ##  [79] plyr_1.8.4               magrittr_1.5            
+    ##  [81] R6_2.4.0                 generics_0.0.2          
+    ##  [83] pillar_1.3.1             haven_2.3.1             
+    ##  [85] withr_2.1.2              fitdistrplus_1.1-1      
+    ##  [87] RCurl_1.98-1.2           survival_2.44-1.1       
+    ##  [89] future.apply_1.6.0       tsne_0.1-3              
+    ##  [91] modelr_0.1.4             crayon_1.3.4            
+    ##  [93] KernSmooth_2.23-15       plotly_4.9.2.1          
+    ##  [95] rmarkdown_1.12           viridis_0.5.1           
+    ##  [97] locfit_1.5-9.4           grid_3.6.1              
+    ##  [99] readxl_1.3.1             data.table_1.12.2       
+    ## [101] metap_1.1                digest_0.6.18           
+    ## [103] R.utils_2.10.1           munsell_0.5.0           
+    ## [105] beeswarm_0.2.3           viridisLite_0.3.0       
+    ## [107] vipor_0.4.5

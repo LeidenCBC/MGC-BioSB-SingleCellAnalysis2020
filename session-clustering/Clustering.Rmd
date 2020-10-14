@@ -31,7 +31,7 @@ In this tutorial, we will use a small dataset of cells from developing mouse emb
 
 ```{r load}
 #load expression matrix
-deng <- readRDS("~/scrna-seq2019/day2/5-clustering/deng-reads.rds")
+deng <- readRDS("deng-reads.rds")
 deng
 
 #look at the cell type annotation
@@ -40,7 +40,7 @@ table(colData(deng)$cell_type2)
 
 ## Feature selection
 
-The first step is to decide which genes to use in clustering the cells. Single cell RNASeq can profile a huge number of genes in a lot of cells. But most of the genes are not expressed enough to provide a meaningful signal and are often driven by technical noise. Including them could potentially add some unwanted signal that would blur the biological variation. Moreover gene filtering can also speed up the computational time for downstream analysis.
+The first step is to decide which genes to use in clustering the cells. Single cell RNA-seq can profile a huge number of genes in a lot of cells. But most of the genes are not expressed enough to provide a meaningful signal and are often driven by technical noise. Including them could potentially add some unwanted signal that would blur the biological variation. Moreover gene filtering can also speed up the computational time for downstream analysis.
 
 First let's have a look at the average expression and the variance of all genes. Which genes seem less important and which are likely to be technical noise?
 
@@ -75,7 +75,7 @@ dim(deng)
 ```
 
 #### Filtering genes that are expressed in very few cells
-We can also filter some genes that are in a small number of cells. This procedure would remove some outlier genes that is highly expressed in one or two cells. These genes are unwanted for further analysis since they mostly comes from an iregular amplification of artifacts. It is important to note that we might not want to filter with this procedure when the aim of the analysis is to detect a very rare subpopulation in the data.
+We can also filter some genes that are in a small number of cells. This procedure would remove some outlier genes that are highly expressed in one or two cells. These genes are unwanted for further analysis since they mostly comes from an irregular amplification of artifacts. It is important to note that we might not want to filter with this procedure when the aim of the analysis is to detect a very rare subpopulation in the data.
 
 ```{r remove_genes_in_few_cells}
 #Calculate the number of non zero expression for each genes
@@ -95,15 +95,17 @@ We can use one of the following methods (RUN ONLY ONE) to determine the highly v
 **Option 1:** Model the coefficient of variation as a function of the mean.
 
 ```{r hvg_1}
-# out <- technicalCV2(deng, spike.type=NA, assay.type= "counts")
+# out <- modelGeneCV2(deng, assay.type= "counts")
 # out$genes <- rownames(deng)
 # out$HVG <- (out$FDR<0.05)
-# as_tibble(out)
-# 
-# # plot highly variable genes
-# ggplot(data = out) + geom_point(aes(x=log2(mean), y=log2(cv2), color=HVG), size=0.5) + geom_point(aes(x=log2(mean), y=log2(trend)), color="red", size=0.1)
-# 
-# ## save the HVG into metadata for safekeeping
+# out <- as_tibble(out)
+
+# plot highly variable genes
+# ggplot(data = out) + 
+#     geom_point(aes(x=log2(mean), y=log2(total), color=HVG), size=0.5) + 
+#     geom_point(aes(x=log2(mean), y=log2(trend)), color="red", size=0.1)
+
+## save the HVG into metadata for safekeeping
 # metadata(deng)$hvg_genes <- rownames(deng)[out$HVG]
 ```
 
@@ -135,13 +137,13 @@ The clustering problem is computationally difficult due to the high level of noi
 
 ```{r pca}
 #PCA (select the number of components to calculate)
-deng <- runPCA(deng, method = "irlba",
+deng <- runPCA(deng,
              ncomponents = 30,
-             feature_set = metadata(deng)$hvg_genes)
+             subset_row = metadata(deng)$hvg_genes)
 
 #Make a scree plot (percentage variance explained per PC) to determine the number of relevant components
 X <- attributes(deng@reducedDims$PCA)
-plot(X$percentVar~c(1:30), type="b", lwd=1, ylab="Percentage variance" , xlab="PCs" , bty="l" , pch=1)
+plot(attr(reducedDim(deng), "percentVar")~c(1:30), type="b", lwd=1, ylab="Percentage variance" , xlab="PCs" , bty="l" , pch=1)
 ```
 
 Make a PCA plot (PC1 vs. PC2) 
@@ -151,7 +153,7 @@ plotReducedDim(deng, "PCA", colour_by = "cell_type2")
 ```
 
 Make a tSNE plot
-*Note:* tSNE is a stochastic method. Everytime you run it you will get slightly different results. For convinience we can get the same results if we seet the seed.
+*Note:* tSNE is a stochastic method. Everytime you run it you will get slightly different results. For convenience we can get the same results if we seet the seed.
 
 ```{r tSNE, warning=FALSE}
 #tSNE
@@ -195,7 +197,7 @@ plot_grid(plotReducedDim(deng, "TSNE", colour_by = "cluster_hclust"),
           plotReducedDim(deng, "TSNE", colour_by = "cell_type2"))
 ```
 
-Now let's try a different distance measure. A commonly used distance measue is 1 - correlation.
+Now let's try a different distance measure. A commonly used distance measure is 1 - correlation.
 
 ```{r hierarchical_corr_ward}
 # Calculate Distances (1 - correlation)
@@ -247,7 +249,7 @@ plot_grid(plotReducedDim(deng, "PCA", colour_by = "cluster_hclust"),
 
 ```{r k-means, warning=FALSE}
 # Do kmeans algorithm on TSNE coordinates
-deng_kmeans <- kmeans(x = deng@reducedDims$TSNE,centers = 10)
+deng_kmeans <- kmeans(x = reducedDim(deng, "TSNE"),centers = 10)
 TSNE_kmeans <- factor(deng_kmeans$cluster)
 colData(deng)$TSNE_kmeans <- TSNE_kmeans
 #Compare with ground truth
@@ -260,7 +262,7 @@ plot_grid(plotTSNE(deng, colour_by = "TSNE_kmeans"),
 
 ```{r graph_clust, warning=FALSE}
 #k=5
-#The k parameter denfines the number of closest cells to look for each cells
+#The k parameter defines the number of closest cells to look for each cells
 SNNgraph_k5 <- buildSNNGraph(x = deng, k=5) 
 SNNcluster_k5 <- cluster_louvain(SNNgraph_k5)
 colData(deng)$SNNcluster_k5 <- factor(SNNcluster_k5$membership)
