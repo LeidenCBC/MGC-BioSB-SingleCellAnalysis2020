@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Overview
 
-In this tutorial we will explore different methods to perform differential expression analysis on scRNA-seq data. The exercises are base don:
+In this tutorial we will explore different methods to perform differential expression analysis on scRNA-seq data. The exercises are based on:
 - Seurat Differential expression testing [vignette](https://satijalab.org/seurat/v3.2/de_vignette.html)  
 
 Load required packages:
@@ -39,7 +39,7 @@ In Seurat, differential expression analysis can be performed using the FindMarke
 
 As a default, Seurat performs differential expression based on the non-parameteric Wilcoxon rank sum test. 
 
-List options for groups to perform differential expression on
+List options for groups to perform differential expression on.
 
 ```{r seurat_a}
 levels(pbmc)
@@ -58,8 +58,6 @@ avg_logFC : log fold-chage of the average expression between the two groups. Pos
 pct.1 : The percentage of cells where the feature is detected in the first group
 pct.2 : The percentage of cells where the feature is detected in the second group
 p_val_adj : Adjusted p-value, based on bonferroni correction using all features in the dataset.
-
-If the ident.2 parameter is omitted or set to NULL, FindMarkers will test for differentially expressed features between the group specified by ident.1 and all other cells.
 
 If the ident.2 parameter is omitted or set to NULL, FindMarkers will test for differentially expressed features between the group specified by ident.1 and all other cells.
 
@@ -135,7 +133,7 @@ pbmc.sce <- as.SingleCellExperiment(pbmc)
 markers.pbmc <- findMarkers(pbmc.sce, groups=pbmc.sce$ident)
 ```
 
-You can then choose one dataframe (in this sxample, corresponding to CD14+ Mono). This DataFrame contains log2-fold changes of expression in the chosen cluster over each other cluster as well as several statistics obtained by combining  p-values across the pairwise comparisons involving the cluster of interest.
+You can then choose one dataframe (in this example, corresponding to CD14+ Mono). This DataFrame contains log2-fold changes of expression in the chosen cluster over each other cluster as well as several statistics obtained by combining  p-values across the pairwise comparisons involving the cluster of interest.
 
 ```{r scran_c}
 chosen <- "CD14+ Mono"
@@ -181,7 +179,7 @@ p-value that is obtained by applying Simes’ method to the pairwise p-values fo
 
 ### Wilcoxon vs t-test
 
-Also in scran, you can use differnt DE tests. Beside the default Welch t-tes, you can also use a Wilcoxon rank-sum test or a binomial test.  
+Also in scran, you can use differnt DE tests. Beside the default Welch t-test, you can also use a Wilcoxon rank-sum test or a binomial test.  
 
 ```{r scran_f}
 markers.pbmc.wrs <- findMarkers(pbmc.sce, groups=pbmc.sce$ident, test="wilcox")
@@ -191,12 +189,12 @@ interesting.wrs[1:10,1:4]
 ```
 
 
-One advantage of the Wilcoxon rank-sum test over the Welch t-test is that it is symmetric with respect to differences in the size of the groups being compared. In other words, it is less affected by the number pf cells in each group. On the other hand, the t-test will favor genes where the larger group has the higher relative variance as this increases the estimated degrees of freedom and decreases the resulting p-value
+One advantage of the Wilcoxon rank-sum test over the Welch t-test is that it is symmetric with respect to differences in the size of the groups being compared. In other words, it is less affected by the number of cells in each group. On the other hand, the t-test will favor genes where the larger group has the higher relative variance as this increases the estimated degrees of freedom and decreases the resulting p-value
 
 To illustrate this we will use an example from ["Orchestrating Single-Cell Analysis with Bioconductor”](https://osca.bioconductor.org/marker-detection.html). In this example, we will compare alpha and gamma cells in the human pancreas data set from Lawlor et al. (2017)
 
 ```{r scran_g, fig.wide=TRUE, fig.asp=2}
-sce.lawlor <- readRDS(file = "../session-differentialexpression/sce_lawlor.rds")
+sce.lawlor <- readRDS(file = "sce_lawlor.rds")
 
 marker.lawlor.t <- findMarkers(sce.lawlor, groups=sce.lawlor$`cell type`, 
                                direction="up", restrict=c("Alpha", "Gamma/PP"))
@@ -239,7 +237,7 @@ Can you observe the effects of the tests in the resulting genes?
 
 ## DE testing for integrated data
 
-Nowadays, it is common to work with multiple scRNA-seq datasets. As we have seen in the integration practical, several strategies exist to integrate multiple datasets and perform cell-based analysis (e.g. clsutering or trajectory inference) using the integrated data (i.e. data corrected for batch effects). 
+Nowadays, it is common to work with multiple scRNA-seq datasets. As we have seen in the integration practical, several strategies exist to integrate multiple datasets and perform cell-based analysis (e.g. clustering or trajectory inference) using the integrated data (i.e. data corrected for batch effects). 
 
 But what about gene-based analysis? Can we use the integrated (i.e. corrected) data for differential expression analysis? In general, this is not recommended. The reason is that arbitrary correction algorithms do not preserve the magnitude or the direction of differences in per-gene expression when attempting to align multiple batches. Further, the correction can introduce artificial agreement across batches. For a good discussion of these implications, check [chapter 13.7](https://osca.bioconductor.org/integrating-datasets.html#using-corrected-values) in ["Orchestrating Single-Cell Analysis with Bioconductor”](https://osca.bioconductor.org/marker-detection.html)  
 
@@ -252,6 +250,9 @@ To identify canonical cell type marker genes that are conserved across batches, 
 For this example, we will use the pancreas datasets used in the integration session.
 
 ```{r integration_a}
+# Free up some memory before we read new data
+rm(list = ls())
+
 pancreas.data <- readRDS(file = "../session-integration/session-integration_files/pancreas_expression_matrix.rds")
 metadata <- readRDS(file = "../session-integration/session-integration_files/pancreas_metadata.rds")
 

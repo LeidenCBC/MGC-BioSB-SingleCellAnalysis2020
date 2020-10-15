@@ -7,7 +7,7 @@ Created by: Ahmed Mahfouz
 
 In this tutorial we will explore different methods to perform
 differential expression analysis on scRNA-seq data. The exercises are
-base don: - Seurat Differential expression testing
+based on: - Seurat Differential expression testing
 [vignette](https://satijalab.org/seurat/v3.2/de_vignette.html)
 
 Load required packages:
@@ -68,7 +68,7 @@ As a default, Seurat performs differential expression based on the
 non-parameteric Wilcoxon rank sum test.
 
 List options for groups to perform differential expression
-    on
+    on.
 
 ``` r
 levels(pbmc)
@@ -104,11 +104,6 @@ features in the dataset.
 If the ident.2 parameter is omitted or set to NULL, FindMarkers will
 test for differentially expressed features between the group specified
 by ident.1 and all other cells.
-
-If the ident.2 parameter is omitted or set to NULL, FindMarkers will
-test for differentially expressed features between the group specified
-by ident.1 and all other
-cells.
 
 ``` r
 # Find differentially expressed features between CD14+ Monocytes and all other cells, only
@@ -321,7 +316,7 @@ markers for each cluster.
 markers.pbmc <- findMarkers(pbmc.sce, groups=pbmc.sce$ident)
 ```
 
-You can then choose one dataframe (in this sxample, corresponding to
+You can then choose one dataframe (in this example, corresponding to
 CD14+ Mono). This DataFrame contains log2-fold changes of expression in
 the chosen cluster over each other cluster as well as several statistics
 obtained by combining p-values across the pairwise comparisons involving
@@ -400,7 +395,7 @@ p-values for each gene.
 ### Wilcoxon vs t-test
 
 Also in scran, you can use differnt DE tests. Beside the default Welch
-t-tes, you can also use a Wilcoxon rank-sum test or a binomial
+t-test, you can also use a Wilcoxon rank-sum test or a binomial
 test.
 
 ``` r
@@ -439,7 +434,7 @@ interesting.wrs[1:10,1:4]
 One advantage of the Wilcoxon rank-sum test over the Welch t-test is
 that it is symmetric with respect to differences in the size of the
 groups being compared. In other words, it is less affected by the number
-pf cells in each group. On the other hand, the t-test will favor genes
+of cells in each group. On the other hand, the t-test will favor genes
 where the larger group has the higher relative variance as this
 increases the estimated degrees of freedom and decreases the resulting
 p-value
@@ -452,7 +447,7 @@ pancreas data set from Lawlor et
 al. (2017)
 
 ``` r
-sce.lawlor <- readRDS(file = "../session-differentialexpression/sce_lawlor.rds")
+sce.lawlor <- readRDS(file = "sce_lawlor.rds")
 
 marker.lawlor.t <- findMarkers(sce.lawlor, groups=sce.lawlor$`cell type`, 
                                direction="up", restrict=c("Alpha", "Gamma/PP"))
@@ -499,7 +494,7 @@ Can you observe the effects of the tests in the resulting genes?
 Nowadays, it is common to work with multiple scRNA-seq datasets. As we
 have seen in the integration practical, several strategies exist to
 integrate multiple datasets and perform cell-based analysis
-(e.g. clsutering or trajectory inference) using the integrated data
+(e.g. clustering or trajectory inference) using the integrated data
 (i.e. data corrected for batch effects).
 
 But what about gene-based analysis? Can we use the integrated
@@ -530,6 +525,9 @@ integration
 session.
 
 ``` r
+# Free up some memory before we read new data
+rm(list = ls())
+
 pancreas.data <- readRDS(file = "../session-integration/session-integration_files/pancreas_expression_matrix.rds")
 metadata <- readRDS(file = "../session-integration/session-integration_files/pancreas_metadata.rds")
 
