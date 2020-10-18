@@ -51,11 +51,11 @@
 ### Day 5 (Friday 23.10.2020) - _Mini-symposium_
 | When | What | Who |
 | ------------- | ------------- | ------------- |
-|09:00-09:45 |TBD | TBD |
-|09:45-10:30 |TBD | TBD |
+|09:00-09:45 |Single-cell and Spatial transcriptomics reveal somitogenesis in mouse gastruloids | Anna Alemany (Hubrecht Institute) |
+|09:45-10:30 |TBD | Jop Kind (Hubrecht Institute) |
 |10:30-11:00 |_break_ | |
-|11:00-11:45 |TBD | TBD |
-|11:45-12:30 |TBD | TBD |
+|11:00-11:45 |Whole genome cell state tracing of gene and enhancer activity in the small intestine | Ruben Boers (Erasmus MC) |
+|11:45-12:30 |Single-cell RNA-seq unravels developmental dynamics in vivo and in vitro | Stefan Semrau (Leiden University) |
 
 
 ## [Back to main](README.md)
