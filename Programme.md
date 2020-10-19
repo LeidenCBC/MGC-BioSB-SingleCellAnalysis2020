@@ -3,15 +3,15 @@
 ### Day 1 (Monday 19.10.2020)
 | When | What | Who |
 | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: [Overview different single-cell platforms and assays](Lectures\Day1_Overview different single-cell platforms and assays.pdf) | Susan Kloet |
+|09:00-10:00 |Lecture: [Overview different single-cell platforms and assays](Lectures/Day1_Overview different single-cell platforms and assays.pdf) | Susan Kloet |
 |10:00-10:30 |_break_ |  |
-|10:30-12:00 |Lecture: (Plate-based scRNA-seq)[Lectures\Day1_Plate-based scRNAseq.pdf] | Miao Chien |
+|10:30-12:00 |Lecture: [Plate-based scRNA-seq](Lectures/Day1_Plate-based scRNAseq.pdf) | Miao Chien |
 |12:00-13:00 |_lunch_ |  |
-|13:00-14:15 |Lecture: Droplet-based scRNA-seq (part1)[Lectures\Day1_Droplet-based scRNAseq (part1).pdf] (part2)[Lectures\Day1_Droplet-based scRNAseq (part2).pdf] | Susan Kloet & Miao Chien |
+|13:00-14:15 |Lecture: Droplet-based scRNA-seq [part1](Lectures/Day1_Droplet-based scRNAseq (part1).pdf) [part2](Lectures/Day1_Droplet-based scRNAseq (part2).pdf) | Susan Kloet & Miao Chien |
 |14:15-14:30 |_break_| |
-|14:30-15:30 |Lecture: (Single-cell multi-omics)[Lectures\Day1_Single-cell multi-omics.pdf] | Miao Chien |
+|14:30-15:30 |Lecture: [Single-cell multi-omics](Lectures/Day1_Single-cell multi-omics.pdf) | Miao Chien |
 |15:30-16:00 |_break_ | |
-|16:00-17:00 |Lecture: (Preprocessing: from reads to a count matrix)[Lectures\Day1_Preprocessing from reads to a count matrix.pdf] | Roberta Menafra |
+|16:00-17:00 |Lecture: [Preprocessing: from reads to a count matrix](Lectures/Day1_Preprocessing from reads to a count matrix.pdf) | Roberta Menafra |
 
 ### Day 2 (Tuesday 20.10.2020)
 | When | What | Who |
