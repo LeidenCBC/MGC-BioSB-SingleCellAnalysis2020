@@ -52,7 +52,7 @@
 | When | What | Who |
 | ------------- | ------------- | ------------- |
 |09:00-09:45 |Single-cell and Spatial transcriptomics reveal somitogenesis in mouse gastruloids | Anna Alemany (Hubrecht Institute) |
-|09:45-10:30 |TBD | Jop Kind (Hubrecht Institute) |
+|09:45-10:30 |Simultaneous quantifications of epigenetics and transcriptomics in the same cell with scDam&T | Jop Kind (Hubrecht Institute) |
 |10:30-11:00 |_break_ | |
 |11:00-11:45 |Whole genome cell state tracing of gene and enhancer activity in the small intestine | Ruben Boers (Erasmus MC) |
 |11:45-12:30 |Single-cell RNA-seq unravels developmental dynamics in vivo and in vitro | Stefan Semrau (Leiden University) |
