@@ -7,7 +7,7 @@
 |10:00-10:30 |_break_ |  |
 |10:30-12:00 |Lecture: [Plate-based scRNA-seq](Lectures/Day1_Plate_based_scRNAseq.pdf) | Miao Chien |
 |12:00-13:00 |_lunch_ |  |
-|13:00-14:15 |Lecture: Droplet-based scRNA-seq ([part1](Lectures/Day1_Droplet_based_scRNAseq_part1.pdf)) ([part2](Lectures/Day1_Droplet_based_scRNAseq_part1.pdf)) | Susan Kloet & Miao Chien |
+|13:00-14:15 |Lecture: Droplet-based scRNA-seq ([part1](Lectures/Day1_Droplet_based_scRNAseq_PartB.pdf)) ([part2](Lectures/Day1_Droplet_based_scRNAseq_PartB.pdf)) | Susan Kloet & Miao Chien |
 |14:15-14:30 |_break_| |
 |14:30-15:30 |Lecture: [Single-cell multi-omics](Lectures/Day1_Single_cell_multi_omics.pdf) | Miao Chien |
 |15:30-16:00 |_break_ | |
