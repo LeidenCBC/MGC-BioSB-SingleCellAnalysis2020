@@ -20,11 +20,11 @@
 |10:00-10:30 |_break_ |  |
 |10:30-11:30 |Lecture: [Quality control and normalization](Lectures/Day2_Quality_control_and_normalization.pdf) | Ahmed Mahfouz |
 |11:30-12:30 |_lunch_ |  |
-|12:30-14:00 |Lab: Quality control and normalization | TAs |
+|12:30-14:00 |Lab: [Quality control and normalization](session-qc-normalization/QC_Normalization.md) | TAs |
 |14:00-14:15 |_break_ | |
-|14:15-15:15 |Lecture: Dimensionality reduction | Thomas Höllt |
+|14:15-15:15 |Lecture: [Dimensionality reduction](Lectures/Day2_Dimensionality_reduction.pdf) | Thomas Höllt |
 |15:15-15:30 |_break_ | |
-|15:30-17:00 |Lab: Dimensionality reduction | TAs |
+|15:30-17:00 |Lab: [Dimensionality reduction](session-dimensionalityreduction/Dimensionality_Reduction.MD) | TAs |
 
 ### Day 3 (Wednesday 21.10.2020)
 | When | What | Who |
