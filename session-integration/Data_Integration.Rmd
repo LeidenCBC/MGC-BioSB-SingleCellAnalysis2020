@@ -23,6 +23,9 @@ For this tutorial we will use 3 different human pancreatic islet cell datasets f
 Load required packages:
 
 ```{r packages}
+# Clear the workspace
+rm(list=ls())
+
 suppressMessages(require(Seurat))
 suppressMessages(require(ggplot2))
 suppressMessages(require(cowplot))
@@ -50,6 +53,8 @@ Create a Seurat object with all datasets.
 
 ```{r create_Seurat}
 pancreas <- CreateSeuratObject(pancreas.data, meta.data = metadata)
+remove(pancreas.data)
+
 ```
 
 Let's first look at the datasets before applying any batch correction. We perform standard preprocessing (log-normalization), and identify variable features based on a variance stabilizing transformation (`"vst"`). Next, we scale the integrated data, run PCA, and visualize the results with UMAP. The integrated datasets cluster by cell type, instead of by technology
@@ -73,12 +78,14 @@ We split the combined object into a list, with each dataset as an element. We pe
 
 ```{r norm_indiv}
 pancreas.list <- SplitObject(pancreas, split.by = "tech")
+remove(pancreas)
 
 for (i in 1:length(pancreas.list)) {
     pancreas.list[[i]] <- NormalizeData(pancreas.list[[i]], verbose = FALSE)
     pancreas.list[[i]] <- FindVariableFeatures(pancreas.list[[i]], selection.method = "vst", nfeatures = 2000, 
         verbose = FALSE)
 }
+
 ```
 
 
@@ -95,6 +102,8 @@ We then pass these anchors to the `IntegrateData` function, which returns a Seur
 
 ```{r integrate}
 pancreas.integrated <- IntegrateData(anchorset = pancreas.anchors, dims = 1:30)
+remove(reference.list)
+remove(pancreas.anchors)
 ```
 
 After running `IntegrateData`, the `Seurat` object will contain a new `Assay` with the integrated (or ‘batch-corrected’) expression matrix. Note that the original (uncorrected values) are still stored in the object in the “RNA” assay, so you can switch back and forth.
@@ -128,6 +137,9 @@ celseq.data <- as.SingleCellExperiment(pancreas.list$celseq)
 celseq2.data <- as.SingleCellExperiment(pancreas.list$celseq2)
 fluidigmc1.data <- as.SingleCellExperiment(pancreas.list$fluidigmc1)
 smartseq2.data <- as.SingleCellExperiment(pancreas.list$smartseq2)
+
+remove(pancreas.integrated)
+remove(pancreas.list)
 ```
 
 ### Data preprocessing 
