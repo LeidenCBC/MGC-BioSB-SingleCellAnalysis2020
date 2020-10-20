@@ -24,7 +24,7 @@
 |14:00-14:15 |_break_ | |
 |14:15-15:15 |Lecture: [Dimensionality reduction](Lectures/Day2_Dimensionality_reduction.pdf) | Thomas Höllt |
 |15:15-15:30 |_break_ | |
-|15:30-17:00 |Lab: [Dimensionality reduction](session-dimensionalityreduction/Dimensionality_Reduction.MD) | TAs |
+|15:30-17:00 |Lab: [Dimensionality reduction](session-dimensionalityreduction/Dimensionality_Reduction.md) | TAs |
 
 ### Day 3 (Wednesday 21.10.2020)
 | When | What | Who |
