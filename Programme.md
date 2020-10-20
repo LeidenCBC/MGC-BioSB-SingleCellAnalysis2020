@@ -16,9 +16,9 @@
 ### Day 2 (Tuesday 20.10.2020)
 | When | What | Who |
 | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Experimental design & sample preparation | Susan Kloet |
+|09:00-10:00 |Lecture: [Experimental design & sample preparation](Lectures/Day2_Experimental_design_and_sample_preparation.pdf) | Susan Kloet |
 |10:00-10:30 |_break_ |  |
-|10:30-11:30 |Lecture: Quality control and normalization | Ahmed Mahfouz |
+|10:30-11:30 |Lecture: [Quality control and normalization](Lectures/Day2_Quality_control_and_normalization.pdf) | Ahmed Mahfouz |
 |11:30-12:30 |_lunch_ |  |
 |12:30-14:00 |Lab: Quality control and normalization | TAs |
 |14:00-14:15 |_break_ | |
