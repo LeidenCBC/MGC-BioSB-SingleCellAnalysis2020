@@ -33,7 +33,7 @@
 |10:00-10:30 |_break_ |  |
 |10:30-12:00 |Lab: [Clustering](session-clustering/Clustering.md) | TAs |
 |12:00-13:00 |_lunch_ |  |
-|13:00-14:00 |Lecture: Data integration | Tamim Abdelaal |
+|13:00-14:00 |Lecture: [Data integration](Lectures/Day3_Data_Integration.pdf) | Tamim Abdelaal |
 |14:00-14:30 |_break_ | |
 |14:30-16:30 |Lab: [Data integration](session-integration/Data_Integration.md) | TAs |
 
@@ -42,11 +42,11 @@
 | ------------- | ------------- | ------------- |
 |09:00-10:00 |Lecture: Trajectory inference | Mohammed Charrout |
 |10:00-10:30 |_break_ |  |
-|10:30-12:00 |Lab: Trajectory inference | TAs |
+|10:30-12:00 |Lab: [Trajectory inference](session-trajectories/session-trajectories.md) | TAs |
 |12:00-13:00 |_lunch_ |  |
 |13:00-14:00 |Lecture: Differential expression analysis | Ahmed Mahfouz |
 |14:00-14:30 |_break_ | |
-|14:30-16:30 |Lab: Differential expression analysis | TAs |
+|14:30-16:30 |Lab: [Differential expression analysis](session-differentialexpression/Differential_Expression.md) | TAs |
 
 ### Day 5 (Friday 23.10.2020) - _Mini-symposium_
 | When | What | Who |
