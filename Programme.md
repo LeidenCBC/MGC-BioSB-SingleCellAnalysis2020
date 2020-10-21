@@ -29,13 +29,13 @@
 ### Day 3 (Wednesday 21.10.2020)
 | When | What | Who |
 | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Clustering | Marcel Reinders |
+|09:00-10:00 |Lecture: [Clustering](Lectures/Day3_Clustering.pdf) | Marcel Reinders |
 |10:00-10:30 |_break_ |  |
-|10:30-12:00 |Lab: Clustering | TAs |
+|10:30-12:00 |Lab: [Clustering](session-clustering/Clustering.md) | TAs |
 |12:00-13:00 |_lunch_ |  |
 |13:00-14:00 |Lecture: Data integration | Tamim Abdelaal |
 |14:00-14:30 |_break_ | |
-|14:30-16:30 |Lab: Data integration | TAs |
+|14:30-16:30 |Lab: [Data integration](session-integration/Data_Integration.md) | TAs |
 
 ### Day 4 (Thursday 22.10.2020)
 | When | What | Who |
