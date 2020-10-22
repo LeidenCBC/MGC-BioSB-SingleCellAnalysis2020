@@ -40,7 +40,7 @@
 ### Day 4 (Thursday 22.10.2020)
 | When | What | Who |
 | ------------- | ------------- | ------------- |
-|09:00-10:00 |Lecture: Trajectory inference | Mohammed Charrout |
+|09:00-10:00 |Lecture: [Trajectory inference](Lectures/Day4_Trajectory_inference.pdf) | Mohammed Charrout |
 |10:00-10:30 |_break_ |  |
 |10:30-12:00 |Lab: [Trajectory inference](session-trajectories/session-trajectories.md) | TAs |
 |12:00-13:00 |_lunch_ |  |
